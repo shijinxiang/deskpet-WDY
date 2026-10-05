@@ -9,8 +9,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\frame_*.png" />
     <Resource Include="Assets\doraemon.png" />
-    <None Update="Assets\doraemon.png">
+    <None Update="Assets\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
