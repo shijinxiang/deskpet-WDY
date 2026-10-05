@@ -1,0 +1,104 @@
+<Window x:Class="TranslatePet.UI.Views.SnippingOverlayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="SnippingOverlay"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        Cursor="Cross"
+        KeyDown="OnKeyDown"
+        MouseDown="OnMouseDown"
+        MouseMove="OnMouseMove"
+        MouseUp="OnMouseUp"
+        Loaded="OnLoaded">
+    <Grid x:Name="RootGrid" ClipToBounds="True">
+        <!-- 截取的原图背景 -->
+        <Image x:Name="BackgroundImage" Stretch="Fill" />
+
+        <!-- 四周暗色遮罩 (包围选区) -->
+        <Border x:Name="MaskTop" Background="#70000000" HorizontalAlignment="Stretch" VerticalAlignment="Top" />
+        <Border x:Name="MaskBottom" Background="#70000000" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" />
+        <Border x:Name="MaskLeft" Background="#70000000" HorizontalAlignment="Left" VerticalAlignment="Stretch" />
+        <Border x:Name="MaskRight" Background="#70000000" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
+
+        <!-- 选区边框与交互框 -->
+        <Canvas x:Name="SelectionCanvas">
+            <Border x:Name="SelectionBorder"
+                    BorderBrush="#00E5FF"
+                    BorderThickness="2"
+                    Background="Transparent"
+                    Visibility="Collapsed">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="8" Color="#00E5FF" Opacity="0.8" ShadowDepth="0"/>
+                </Border.Effect>
+            </Border>
+
+            <!-- 浮动操作栏 -->
+            <Border x:Name="ActionBar"
+                    Visibility="Collapsed"
+                    Background="#1E1E28"
+                    CornerRadius="6"
+                    Padding="8,5"
+                    BorderBrush="#3D3E52"
+                    BorderThickness="1">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="12" Color="#000000" Opacity="0.5" ShadowDepth="3"/>
+                </Border.Effect>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock x:Name="SizeTextBlock" Text="0 × 0" Foreground="#AAAAAA" FontSize="12" VerticalAlignment="Center" Margin="4,0,12,0"/>
+
+                    <Button Content="✅ 确认识别 (Enter)"
+                            Click="OnConfirmClick"
+                            Background="#536DFE"
+                            Foreground="#FFFFFF"
+                            BorderThickness="0"
+                            Padding="10,4"
+                            Cursor="Hand"
+                            FontWeight="SemiBold"
+                            FontSize="12"
+                            Margin="0,0,6,0">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="4"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+
+                    <Button Content="❌ 取消 (Esc)"
+                            Click="OnCancelClick"
+                            Background="#323444"
+                            Foreground="#E0E0E0"
+                            BorderThickness="0"
+                            Padding="10,4"
+                            Cursor="Hand"
+                            FontSize="12">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="4"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </StackPanel>
+            </Border>
+        </Canvas>
+
+        <!-- 初始提示 -->
+        <Border x:Name="HintBanner" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Top" 
+                Margin="0,30,0,0" 
+                Background="#D0181824" 
+                CornerRadius="8" 
+                Padding="16,8"
+                BorderBrush="#40FFFFFF"
+                BorderThickness="1">
+            <TextBlock Text="🖱️ 拖拽鼠标左键框选文字区域 | 按 Esc 或右键取消" 
+                       Foreground="#FFFFFF" 
+                       FontSize="14" 
+                       FontWeight="Medium"/>
+        </Border>
+    </Grid>
+</Window>

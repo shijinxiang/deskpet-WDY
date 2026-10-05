@@ -1,0 +1,124 @@
+<Window x:Class="TranslatePet.UI.Views.ResultWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="翻译结果" 
+        Height="480" Width="460"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        KeyDown="OnKeyDown"
+        MouseDown="OnWindowMouseDown">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="5" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.75"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="#171822"/>
+            <Setter Property="Foreground" Value="#E0E2EC"/>
+            <Setter Property="BorderBrush" Value="#2D2F3E"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="AcceptsReturn" Value="True"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        </Style>
+    </Window.Resources>
+
+    <Border Background="#1F202C" CornerRadius="12" BorderBrush="#353748" BorderThickness="1">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="24" ShadowDepth="6" Color="#000000" Opacity="0.55"/>
+        </Border.Effect>
+        <Grid Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/> <!-- 标题栏 -->
+                <RowDefinition Height="*"/>    <!-- 原文 -->
+                <RowDefinition Height="Auto"/> <!-- 中间控制栏 -->
+                <RowDefinition Height="*"/>    <!-- 译文 -->
+                <RowDefinition Height="Auto"/> <!-- 状态与提示 -->
+            </Grid.RowDefinitions>
+
+            <!-- 顶部标题栏 -->
+            <Grid Grid.Row="0" Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="✨ 翻译助手" Foreground="#00E5FF" FontWeight="Bold" FontSize="14" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                    <!-- 语言选择 -->
+                    <ComboBox x:Name="SourceLangComboBox" Width="90" Height="26" VerticalAlignment="Center" SelectionChanged="OnLangSelectionChanged" />
+                    <TextBlock Text="➔" Foreground="#888899" VerticalAlignment="Center" Margin="6,0,6,0"/>
+                    <ComboBox x:Name="TargetLangComboBox" Width="90" Height="26" VerticalAlignment="Center" SelectionChanged="OnLangSelectionChanged" />
+                </StackPanel>
+
+                <!-- 关闭按钮 -->
+                <Button Grid.Column="2" Content="✕" Width="28" Height="28" Background="#2B2D3C" Click="OnCloseClick" ToolTip="关闭 (Esc)"/>
+            </Grid>
+
+            <!-- 原文区域 (支持检查与编辑) -->
+            <Grid Grid.Row="1" Margin="0,0,0,8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Margin="0,0,0,4">
+                    <TextBlock Text="原文 (可直接编辑修订):" Foreground="#9DA1B4" FontSize="12"/>
+                    <Button Content="📋 复制原文" Click="OnCopyOriginalClick" HorizontalAlignment="Right" Background="Transparent" Foreground="#00E5FF" Padding="4,0"/>
+                </Grid>
+                <TextBox x:Name="OriginalTextBox" Grid.Row="1" />
+            </Grid>
+
+            <!-- 中间操作栏 -->
+            <Grid Grid.Row="2" Margin="0,4,0,8">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="TranslateButton" Content="⚡ 重新翻译" Click="OnTranslateClick" Background="#536DFE" Padding="14,6" Margin="0,0,0,0" FontWeight="SemiBold"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- 译文区域 -->
+            <Grid Grid.Row="3" Margin="0,0,0,8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Margin="0,0,0,4">
+                    <TextBlock Text="译文:" Foreground="#9DA1B4" FontSize="12"/>
+                    <Button Content="📋 复制译文" Click="OnCopyTranslationClick" HorizontalAlignment="Right" Background="Transparent" Foreground="#00E5FF" Padding="4,0"/>
+                </Grid>
+                <TextBox x:Name="TranslationTextBox" Grid.Row="1" IsReadOnly="True" Background="#14151E"/>
+            </Grid>
+
+            <!-- 底部状态指示与提示 -->
+            <Grid Grid.Row="4" Margin="0,4,0,0">
+                <TextBlock x:Name="StatusTextBlock" Text="按 Esc 关闭结果" Foreground="#74778C" FontSize="11" VerticalAlignment="Center"/>
+                <TextBlock x:Name="CopiedHintBlock" Text="已复制到剪贴板！" Foreground="#00E5FF" FontSize="11" HorizontalAlignment="Right" Visibility="Collapsed"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
