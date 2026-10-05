@@ -70,7 +70,7 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="✨ 翻译助手" Foreground="#00E5FF" FontWeight="Bold" FontSize="14" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                    <TextBlock Text="🍞 哆啦A梦 · 翻译魔芋" Foreground="#00E5FF" FontWeight="Bold" FontSize="14" VerticalAlignment="Center" Margin="0,0,12,0"/>
                     <!-- 语言选择 -->
                     <ComboBox x:Name="SourceLangComboBox" Width="90" Height="26" VerticalAlignment="Center" SelectionChanged="OnLangSelectionChanged" />
                     <TextBlock Text="➔" Foreground="#888899" VerticalAlignment="Center" Margin="6,0,6,0"/>

@@ -1,7 +1,7 @@
 <Window x:Class="TranslatePet.UI.Views.SettingsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="桌宠翻译 - 偏好设置" 
+        Title="哆啦A梦桌宠翻译 - 偏好设置" 
         Height="540" Width="480"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
@@ -73,7 +73,7 @@
 
             <!-- 标题栏 -->
             <Grid Grid.Row="0" Margin="0,0,0,12">
-                <TextBlock Text="⚙️ 软件设置" Foreground="#00E5FF" FontWeight="Bold" FontSize="15" VerticalAlignment="Center"/>
+                <TextBlock Text="⚙️ 哆啦A梦桌宠设置" Foreground="#00E5FF" FontWeight="Bold" FontSize="15" VerticalAlignment="Center"/>
                 <Button Content="✕" Width="26" Height="26" Background="#2B2D3C" Click="OnCloseClick" HorizontalAlignment="Right"/>
             </Grid>
 

@@ -112,18 +112,33 @@ public class TrayIconManager : IDisposable
         using (var g = Graphics.FromImage(bmp))
         {
             g.SmoothingMode = SmoothingMode.AntiAlias;
-            using var brush = new LinearGradientBrush(new Rectangle(0, 0, 32, 32),
-                Color.FromArgb(124, 77, 255), Color.FromArgb(0, 229, 255), 45f);
-            g.FillEllipse(brush, 2, 2, 28, 28);
-            using var pen = new Pen(Color.White, 2f);
-            g.DrawEllipse(pen, 2, 2, 28, 28);
 
-            using var eyeBrush = new SolidBrush(Color.White);
-            g.FillEllipse(eyeBrush, 9, 11, 4, 6);
-            g.FillEllipse(eyeBrush, 19, 11, 4, 6);
+            // 哆啦A梦经典蓝脑袋
+            using var blueBrush = new SolidBrush(Color.FromArgb(0, 150, 214));
+            g.FillEllipse(blueBrush, 1, 1, 30, 30);
 
-            using var sparkBrush = new SolidBrush(Color.Gold);
-            g.FillEllipse(sparkBrush, 13, 3, 6, 6);
+            // 白色下巴与脸部
+            using var whiteBrush = new SolidBrush(Color.White);
+            g.FillEllipse(whiteBrush, 4, 10, 24, 20);
+
+            // 红项圈
+            using var redBrush = new SolidBrush(Color.FromArgb(229, 57, 53));
+            g.FillRectangle(redBrush, 6, 26, 20, 3);
+
+            // 金黄色小铃铛
+            using var bellBrush = new SolidBrush(Color.FromArgb(255, 215, 0));
+            g.FillEllipse(bellBrush, 13, 24, 6, 6);
+
+            // 标志性红色小圆鼻
+            g.FillEllipse(redBrush, 14, 12, 4, 4);
+
+            // 眼睛
+            using var eyePen = new Pen(Color.FromArgb(30, 30, 30), 1.2f);
+            g.DrawEllipse(eyePen, 10, 6, 5, 7);
+            g.DrawEllipse(eyePen, 17, 6, 5, 7);
+            using var pupilBrush = new SolidBrush(Color.FromArgb(30, 30, 30));
+            g.FillEllipse(pupilBrush, 12, 9, 2, 3);
+            g.FillEllipse(pupilBrush, 18, 9, 2, 3);
         }
 
         _hIcon = bmp.GetHicon();
@@ -136,7 +151,7 @@ public class TrayIconManager : IDisposable
             uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP,
             uCallbackMessage = WM_TRAYICON,
             hIcon = _hIcon,
-            szTip = "Windows 翻译桌宠 (运行中)"
+            szTip = "哆啦A梦 翻译桌宠 (运行中)"
         };
 
         _isCreated = Shell_NotifyIcon(NIM_ADD, ref nid);

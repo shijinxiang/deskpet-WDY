@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using Point = System.Windows.Point;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
@@ -25,12 +26,12 @@ public partial class PetWindow : Window
 
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
-        // 启动待机呼吸动画
+        // 启动待机悬浮浮动动画与星光闪烁动画
         var floatSb = TryFindResource("FloatStoryboard") as Storyboard;
         floatSb?.Begin();
 
-        var blinkSb = TryFindResource("BlinkStoryboard") as Storyboard;
-        blinkSb?.Begin();
+        var sparkleSb = TryFindResource("SparkleStoryboard") as Storyboard;
+        sparkleSb?.Begin();
 
         // 恢复位置
         var settings = _settingsService.CurrentSettings;
@@ -45,6 +46,32 @@ public partial class PetWindow : Window
             Left = SystemParameters.WorkArea.Right - Width - 30;
             Top = SystemParameters.WorkArea.Bottom - Height - 50;
         }
+    }
+
+    private void OnPetMouseEnter(object sender, MouseEventArgs e)
+    {
+        var anim = new DoubleAnimation(1.06, TimeSpan.FromMilliseconds(180))
+        {
+            EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
+        };
+        PetHoverScale.BeginAnimation(ScaleTransform.ScaleXProperty, anim);
+        PetHoverScale.BeginAnimation(ScaleTransform.ScaleYProperty, anim);
+
+        var bubbleAnim = new DoubleAnimation(1.0, TimeSpan.FromMilliseconds(200));
+        SpeechBubble.BeginAnimation(UIElement.OpacityProperty, bubbleAnim);
+    }
+
+    private void OnPetMouseLeave(object sender, MouseEventArgs e)
+    {
+        var anim = new DoubleAnimation(1.0, TimeSpan.FromMilliseconds(200))
+        {
+            EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
+        };
+        PetHoverScale.BeginAnimation(ScaleTransform.ScaleXProperty, anim);
+        PetHoverScale.BeginAnimation(ScaleTransform.ScaleYProperty, anim);
+
+        var bubbleAnim = new DoubleAnimation(0.0, TimeSpan.FromMilliseconds(200));
+        SpeechBubble.BeginAnimation(UIElement.OpacityProperty, bubbleAnim);
     }
 
     private void OnPetMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
