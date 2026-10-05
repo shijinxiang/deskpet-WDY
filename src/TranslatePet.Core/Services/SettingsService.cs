@@ -30,13 +30,13 @@ public class SettingsService : ISettingsService
         _settings = new AppSettings();
     }
 
-    public async Task LoadSettingsAsync()
+    public void LoadSettings()
     {
         try
         {
             if (File.Exists(_configFilePath))
             {
-                var json = await File.ReadAllTextAsync(_configFilePath);
+                var json = File.ReadAllText(_configFilePath);
                 var loaded = JsonSerializer.Deserialize<AppSettings>(json);
                 if (loaded != null)
                 {
@@ -52,21 +52,33 @@ public class SettingsService : ISettingsService
         }
 
         _settings = new AppSettings();
-        await SaveSettingsAsync();
+        SaveSettings();
     }
 
-    public async Task SaveSettingsAsync()
+    public void SaveSettings()
     {
         try
         {
             var options = new JsonSerializerOptions { WriteIndented = true };
             var json = JsonSerializer.Serialize(_settings, options);
-            await File.WriteAllTextAsync(_configFilePath, json);
+            File.WriteAllText(_configFilePath, json);
             SettingsChanged?.Invoke(this, EventArgs.Empty);
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Error saving settings: {ex.Message}");
         }
+    }
+
+    public Task LoadSettingsAsync()
+    {
+        LoadSettings();
+        return Task.CompletedTask;
+    }
+
+    public Task SaveSettingsAsync()
+    {
+        SaveSettings();
+        return Task.CompletedTask;
     }
 }

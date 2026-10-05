@@ -29,13 +29,25 @@ public partial class App : Application
 
     private bool _isCapturingWorkflowRunning;
 
-    protected override async void OnStartup(StartupEventArgs e)
+    protected override void OnStartup(StartupEventArgs e)
     {
+        try { System.IO.File.AppendAllText("D:\\温温\\app.log", $"{DateTime.Now:HH:mm:ss.fff} Step 0: OnStartup entered\n"); } catch { }
         base.OnStartup(e);
 
+        AppDomain.CurrentDomain.UnhandledException += (s, ev) =>
+        {
+            try { System.IO.File.WriteAllText("D:\\温温\\crash.log", ev.ExceptionObject.ToString()); } catch { }
+        };
+        DispatcherUnhandledException += (s, ev) =>
+        {
+            try { System.IO.File.WriteAllText("D:\\温温\\crash.log", ev.Exception.ToString()); } catch { }
+        };
+
         // 1. 初始化设置服务
+        try { System.IO.File.AppendAllText("D:\\温温\\app.log", $"{DateTime.Now:HH:mm:ss.fff} Step 1: Loading settings\n"); } catch { }
         _settingsService = new SettingsService();
-        await _settingsService.LoadSettingsAsync();
+        _settingsService.LoadSettings();
+        try { System.IO.File.AppendAllText("D:\\温温\\app.log", $"{DateTime.Now:HH:mm:ss.fff} Step 2: Settings loaded\n"); } catch { }
 
         // 2. 初始化核心与服务
         _captureService = new WpfCaptureService();
@@ -57,15 +69,18 @@ public partial class App : Application
         _workflow = new TranslationWorkflow(_captureService, _ocrService, _translationService, _settingsService);
 
         // 3. 初始化桌宠与窗口句柄
+        try { System.IO.File.AppendAllText("D:\\温温\\app.log", $"{DateTime.Now:HH:mm:ss.fff} Step 3: Creating PetWindow\n"); } catch { }
         _petWindow = new PetWindow(_settingsService);
         _petWindow.RequestCapture += (s, ev) => StartCaptureWorkflow();
         _petWindow.RequestSettings += (s, ev) => ShowSettings();
         _petWindow.RequestExit += (s, ev) => ExitApplication();
 
+        try { System.IO.File.AppendAllText("D:\\温温\\app.log", $"{DateTime.Now:HH:mm:ss.fff} Step 4: Ensuring HWND\n"); } catch { }
         var helper = new WindowInteropHelper(_petWindow);
         var hWnd = helper.EnsureHandle();
 
         // 4. 初始化系统托盘
+        try { System.IO.File.AppendAllText("D:\\温温\\app.log", $"{DateTime.Now:HH:mm:ss.fff} Step 5: Creating TrayIconManager\n"); } catch { }
         _trayManager = new TrayIconManager(hWnd);
         _trayManager.RequestCapture += (s, ev) => StartCaptureWorkflow();
         _trayManager.RequestTogglePet += (s, ev) => TogglePet();
@@ -80,16 +95,20 @@ public partial class App : Application
             return IntPtr.Zero;
         });
 
+        try { System.IO.File.AppendAllText("D:\\温温\\app.log", $"{DateTime.Now:HH:mm:ss.fff} Step 6: Registering hotkey\n"); } catch { }
         _hotkeyService = new GlobalHotkeyHelper();
         _hotkeyService.Initialize(hWnd);
         _hotkeyService.HotkeyPressed += (s, ev) => StartCaptureWorkflow();
         RegisterConfiguredHotkey();
 
         // 6. 显示桌宠
+        try { System.IO.File.AppendAllText("D:\\温温\\app.log", $"{DateTime.Now:HH:mm:ss.fff} Step 7: Showing pet window\n"); } catch { }
+        MainWindow = _petWindow;
         if (_settingsService.CurrentSettings.PetVisible)
         {
             _petWindow.Show();
         }
+        try { System.IO.File.AppendAllText("D:\\温温\\app.log", $"{DateTime.Now:HH:mm:ss.fff} Step 8: PetWindow.Show() completed successfully\n"); } catch { }
     }
 
     private void RegisterConfiguredHotkey()
@@ -235,6 +254,7 @@ public partial class App : Application
 
     private void ExitApplication()
     {
+        try { System.IO.File.AppendAllText("D:\\温温\\app.log", $"{DateTime.Now:HH:mm:ss.fff} [App] ExitApplication called:\n{Environment.StackTrace}\n"); } catch { }
         _hotkeyService.Dispose();
         _trayManager.Dispose();
         _petWindow.Close();
@@ -245,6 +265,7 @@ public partial class App : Application
 
     protected override void OnExit(ExitEventArgs e)
     {
+        try { System.IO.File.AppendAllText("D:\\温温\\app.log", $"{DateTime.Now:HH:mm:ss.fff} [App] OnExit called (ExitCode: {e.ApplicationExitCode}):\n{Environment.StackTrace}\n"); } catch { }
         _hotkeyService?.Dispose();
         _trayManager?.Dispose();
         base.OnExit(e);
