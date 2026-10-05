@@ -151,6 +151,11 @@ public partial class App : Application
 
                 // 打开翻译结果展示窗，提供即时状态
                 _currentResultWindow = new ResultWindow(_workflow, _settingsService);
+                _currentResultWindow.PositionNearRegion(
+                    overlay.SelectedDipRect.X,
+                    overlay.SelectedDipRect.Y,
+                    overlay.SelectedDipRect.Width,
+                    overlay.SelectedDipRect.Height);
                 _currentResultWindow.Show();
 
                 // 异步处理选区 OCR

@@ -22,6 +22,7 @@ public partial class SnippingOverlayWindow : Window
     private double _scaleY = 1.0;
 
     public ScreenRect? SelectedPhysicalRegion { get; private set; }
+    public Rect SelectedDipRect => _selectedDipRect;
 
     public SnippingOverlayWindow(byte[] fullScreenBytes, ScreenRect physicalBounds)
     {

@@ -166,11 +166,51 @@ public partial class ResultWindow : Window
         Close();
     }
 
+    public void PositionNearRegion(double dipX, double dipY, double dipW, double dipH)
+    {
+        WindowStartupLocation = WindowStartupLocation.Manual;
+
+        double targetX = dipX;
+        double targetY = dipY + dipH + 12;
+
+        var screenLeft = SystemParameters.VirtualScreenLeft;
+        var screenTop = SystemParameters.VirtualScreenTop;
+        var screenRight = screenLeft + SystemParameters.VirtualScreenWidth;
+        var screenBottom = screenTop + SystemParameters.VirtualScreenHeight;
+
+        if (targetY + Height > screenBottom - 20)
+        {
+            targetY = dipY - Height - 12;
+        }
+
+        if (targetY < screenTop + 20)
+        {
+            targetY = screenTop + 20;
+        }
+
+        if (targetX + Width > screenRight - 20)
+        {
+            targetX = screenRight - Width - 20;
+        }
+
+        if (targetX < screenLeft + 20)
+        {
+            targetX = screenLeft + 20;
+        }
+
+        Left = targetX;
+        Top = targetY;
+    }
+
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Escape)
         {
             Close();
+        }
+        else if (e.Key == Key.Enter && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+        {
+            _ = ExecuteTranslationAsync();
         }
     }
 
