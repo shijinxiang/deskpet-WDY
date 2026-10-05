@@ -125,30 +125,22 @@ public partial class SnippingOverlayWindow : Window
 
     private void UpdateMasks(Rect rect)
     {
+        FullScreenGeometry.Rect = new Rect(0, 0, Width, Height);
+
         if (rect.Width <= 0 || rect.Height <= 0)
         {
-            MaskTop.Height = Height;
-            MaskBottom.Height = 0;
-            MaskLeft.Width = 0;
-            MaskRight.Width = 0;
+            HollowGeometry.Rect = Rect.Empty;
+            SelectionBorder.Visibility = Visibility.Collapsed;
             return;
         }
 
-        MaskTop.Height = Math.Max(0, rect.Y);
-        MaskBottom.Height = Math.Max(0, Height - rect.Bottom);
-
-        MaskLeft.Height = rect.Height;
-        MaskLeft.Width = Math.Max(0, rect.X);
-        MaskLeft.Margin = new Thickness(0, rect.Y, 0, 0);
-
-        MaskRight.Height = rect.Height;
-        MaskRight.Width = Math.Max(0, Width - rect.Right);
-        MaskRight.Margin = new Thickness(0, rect.Y, 0, 0);
+        HollowGeometry.Rect = rect;
 
         Canvas.SetLeft(SelectionBorder, rect.X);
         Canvas.SetTop(SelectionBorder, rect.Y);
         SelectionBorder.Width = rect.Width;
         SelectionBorder.Height = rect.Height;
+        SelectionBorder.Visibility = Visibility.Visible;
     }
 
     private void PositionActionBar()

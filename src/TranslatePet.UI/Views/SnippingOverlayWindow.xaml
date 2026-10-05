@@ -18,11 +18,19 @@
         <!-- 截取的原图背景 -->
         <Image x:Name="BackgroundImage" Stretch="Fill" />
 
-        <!-- 四周暗色遮罩 (包围选区) -->
-        <Border x:Name="MaskTop" Background="#70000000" HorizontalAlignment="Stretch" VerticalAlignment="Top" />
-        <Border x:Name="MaskBottom" Background="#70000000" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" />
-        <Border x:Name="MaskLeft" Background="#70000000" HorizontalAlignment="Left" VerticalAlignment="Stretch" />
-        <Border x:Name="MaskRight" Background="#70000000" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
+        <!-- 全局统一半透明暗色遮罩 (选区处自动无缝精准挖空，彻底消除色块与接缝) -->
+        <Path Fill="#60000000" IsHitTestVisible="False">
+            <Path.Data>
+                <CombinedGeometry GeometryCombineMode="Exclude">
+                    <CombinedGeometry.Geometry1>
+                        <RectangleGeometry x:Name="FullScreenGeometry" />
+                    </CombinedGeometry.Geometry1>
+                    <CombinedGeometry.Geometry2>
+                        <RectangleGeometry x:Name="HollowGeometry" />
+                    </CombinedGeometry.Geometry2>
+                </CombinedGeometry>
+            </Path.Data>
+        </Path>
 
         <!-- 选区边框与交互框 -->
         <Canvas x:Name="SelectionCanvas">
