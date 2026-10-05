@@ -18,12 +18,16 @@ public partial class PetWindow : Window
     private bool _isDragging;
     private bool _isMouseOver;
 
-    private readonly BitmapImage[] _frames = new BitmapImage[4];
+    // 总共 8 帧: 0(待机), 1(眨眼), 2(开心), 3(挥手), 4(掏铜锣烧), 5(抛起大张嘴), 6(大嚼特嚼), 7(满足眯眯笑)
+    private readonly BitmapImage[] _frames = new BitmapImage[8];
     private DispatcherTimer? _animTimer;
     private int _hoverFrameIndex = 2;
-    private Random _rng = new();
+    private readonly Random _rng = new();
+
     private DateTime _nextBlinkTime = DateTime.UtcNow.AddSeconds(2);
+    private DateTime _nextEatDorayakiTime = DateTime.UtcNow.AddSeconds(8); // 启动后 8 秒初尝铜锣烧
     private bool _isBlinking;
+    private bool _isEatingDorayaki;
 
     public event EventHandler? RequestCapture;
     public event EventHandler? RequestSettings;
@@ -40,7 +44,7 @@ public partial class PetWindow : Window
 
     private void LoadAnimationFrames()
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 8; i++)
         {
             try
             {
@@ -55,7 +59,6 @@ public partial class PetWindow : Window
             }
             catch
             {
-                // Fallback to disk if pack URI fails
                 var diskPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", $"frame_{i}.png");
                 if (File.Exists(diskPath))
                 {
@@ -66,7 +69,6 @@ public partial class PetWindow : Window
             }
         }
 
-        // 默认显示待机常态帧 (Frame 0)
         SetFrame(0);
     }
 
@@ -91,28 +93,29 @@ public partial class PetWindow : Window
 
     private async void OnAnimationTick(object? sender, EventArgs e)
     {
-        if (_isMouseOver)
+        if (_isMouseOver || _isDragging || _isEatingDorayaki)
         {
-            // 鼠标悬停交互状态：在 Frame 2 与 Frame 3 之间交替招手
-            return; // 悬停切帧由专属悬停循环驱动
+            return;
         }
 
-        if (_isBlinking) return;
+        // 1. 待机定时：从百宝袋掏出铜锣烧抛到口中吃
+        if (DateTime.UtcNow >= _nextEatDorayakiTime && !_isBlinking)
+        {
+            _ = PlayEatDorayakiSequenceAsync();
+            return;
+        }
 
-        // 待机自然眨眼调度
-        if (DateTime.UtcNow >= _nextBlinkTime)
+        // 2. 待机常规自然眨眼
+        if (DateTime.UtcNow >= _nextBlinkTime && !_isBlinking)
         {
             _isBlinking = true;
             try
             {
-                // 闭眼 (Frame 1)
                 SetFrame(1);
                 await Task.Delay(130);
 
-                // 睁眼 (Frame 0)
                 SetFrame(0);
 
-                // 35% 几率触发连眨 (Double Blink)
                 if (_rng.NextDouble() < 0.35)
                 {
                     await Task.Delay(80);
@@ -128,19 +131,59 @@ public partial class PetWindow : Window
             finally
             {
                 _isBlinking = false;
-                // 下一次眨眼时间 (2.2 ~ 4.8 秒随机间隔)
                 _nextBlinkTime = DateTime.UtcNow.AddSeconds(2.2 + _rng.NextDouble() * 2.6);
             }
         }
     }
 
+    /// <summary>
+    /// 经典动作：从百宝袋掏出铜锣烧抛向空中接进嘴里吃掉！
+    /// </summary>
+    private async Task PlayEatDorayakiSequenceAsync()
+    {
+        _isEatingDorayaki = true;
+        try
+        {
+            // 动作 1: 从百宝袋掏出金灿灿的铜锣烧举在身前 (Frame 4)
+            SetFrame(4);
+            await Task.Delay(600);
+            if (!_isEatingDorayaki) return;
+
+            // 动作 2: 铜锣烧高高抛向空中，仰头大张嘴“啊——”准备接 (Frame 5)
+            SetFrame(5);
+            await Task.Delay(480);
+            if (!_isEatingDorayaki) return;
+
+            // 动作 3: 接入口中，肉肉的腮帮子鼓鼓地大口咀嚼嚼 (Frame 6)
+            SetFrame(6);
+            await Task.Delay(750);
+            if (!_isEatingDorayaki) return;
+
+            // 动作 4: 咽下肚子，摸摸圆滚滚的肚子，满足地眯眼笑 (Frame 7)
+            SetFrame(7);
+            await Task.Delay(800);
+        }
+        catch
+        {
+            // Ignore cancellation
+        }
+        finally
+        {
+            if (!_isMouseOver)
+            {
+                SetFrame(0);
+            }
+            _isEatingDorayaki = false;
+            // 下一次吃铜锣烧间隔：14 ~ 28 秒随机触发
+            _nextEatDorayakiTime = DateTime.UtcNow.AddSeconds(14 + _rng.NextDouble() * 14);
+        }
+    }
+
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
-        // 启动物理浮动呼吸动画
         var floatSb = TryFindResource("FloatStoryboard") as Storyboard;
         floatSb?.Begin();
 
-        // 恢复位置
         var settings = _settingsService.CurrentSettings;
         if (settings.PetPositionX >= 0 && settings.PetPositionY >= 0)
         {
@@ -157,29 +200,26 @@ public partial class PetWindow : Window
     private void OnPetMouseEnter(object sender, MouseEventArgs e)
     {
         _isMouseOver = true;
+        _isEatingDorayaki = false; // 鼠标互动打断进食，优先响应互动
 
-        // 轻微放大与摇晃
-        var scaleAnim = new DoubleAnimation(1.08, TimeSpan.FromMilliseconds(180))
+        var scaleAnim = new DoubleAnimation(1.08, TimeSpan.FromMilliseconds(160))
         {
             EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
         };
         PetHoverScale.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnim);
         PetHoverScale.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnim);
 
-        // 启动悬停招手切帧循环
         _ = RunHoverAnimationAsync();
     }
 
     private async Task RunHoverAnimationAsync()
     {
-        double angle = 3.0;
+        double angle = 2.5;
         while (_isMouseOver)
         {
-            // Frame 2 -> Frame 3 循环切换
             SetFrame(_hoverFrameIndex);
             _hoverFrameIndex = (_hoverFrameIndex == 2) ? 3 : 2;
 
-            // 头部轻微摆动
             var rotateAnim = new DoubleAnimation(angle, TimeSpan.FromMilliseconds(180))
             {
                 EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
@@ -190,7 +230,6 @@ public partial class PetWindow : Window
             await Task.Delay(200);
         }
 
-        // 恢复正常角度
         var resetRotate = new DoubleAnimation(0, TimeSpan.FromMilliseconds(150));
         PetRotateTransform.BeginAnimation(RotateTransform.AngleProperty, resetRotate);
     }
@@ -199,14 +238,13 @@ public partial class PetWindow : Window
     {
         _isMouseOver = false;
 
-        var scaleAnim = new DoubleAnimation(1.0, TimeSpan.FromMilliseconds(180))
+        var scaleAnim = new DoubleAnimation(1.0, TimeSpan.FromMilliseconds(160))
         {
             EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
         };
         PetHoverScale.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnim);
         PetHoverScale.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnim);
 
-        // 恢复常态帧
         SetFrame(0);
         _nextBlinkTime = DateTime.UtcNow.AddSeconds(1.5);
     }
@@ -227,6 +265,7 @@ public partial class PetWindow : Window
             if (!_isDragging && (Math.Abs(curPos.X - _mouseDownPos.X) > 4 || Math.Abs(curPos.Y - _mouseDownPos.Y) > 4))
             {
                 _isDragging = true;
+                _isEatingDorayaki = false;
                 ReleaseMouseCapture();
                 DragMove();
 
@@ -245,11 +284,10 @@ public partial class PetWindow : Window
             ReleaseMouseCapture();
             if (!_isDragging)
             {
-                // 单击欢快庆祝动作反馈 (Frame 3)
+                // 单击触发欢呼动作 (Frame 3)
                 SetFrame(3);
-                await Task.Delay(180);
+                await Task.Delay(160);
 
-                // 触发截图翻译流程
                 RequestCapture?.Invoke(this, EventArgs.Empty);
 
                 SetFrame(0);
