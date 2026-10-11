@@ -1,10 +1,12 @@
-# TranslatePet - Windows 翻译桌宠
+# deskpet-WDY - Windows 翻译桌宠 (TranslatePet)
 
-一款运行于 Windows 桌面、以轻量桌宠为交互入口的屏幕截图 OCR 翻译工具。
+一款运行于 Windows 桌面、以轻量哆啦A梦桌宠为交互入口的屏幕截图 OCR 翻译与 TypeWords 核心打字记单词工具。
+具有 Windows 11/10 原生毛玻璃（Acrylic Blur）拟物美学界面。
 
 ![Architecture](https://img.shields.io/badge/.NET-8.0%20LTS-blue)
 ![Platform](https://img.shields.io/badge/Platform-Windows%2010%2F11-brightgreen)
 ![Tests](https://img.shields.io/badge/Tests-Passing-success)
+![License](https://img.shields.io/badge/License-MIT-green)
 
 ---
 
