@@ -1,0 +1,354 @@
+<Window x:Class="TranslatePet.UI.Views.VocabularyWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="哆啦A梦 · TypeWords 键盘肌肉记忆背单词" 
+        Height="630" Width="840"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        Focusable="True"
+        PreviewKeyDown="OnWindowPreviewKeyDown"
+        MouseDown="OnWindowMouseDown">
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="#35101422"/>
+            <Setter Property="Foreground" Value="#F1F5F9"/>
+            <Setter Property="BorderBrush" Value="#22FFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#94A3B8"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="7" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.88"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.75"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Opacity" Value="0.4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Border Background="#B8141724" CornerRadius="14" BorderThickness="1">
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#48FFFFFF" Offset="0"/>
+                <GradientStop Color="#1AFFFFFF" Offset="0.4"/>
+                <GradientStop Color="#2538BDF8" Offset="0.8"/>
+                <GradientStop Color="#122C334A" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.BorderBrush>
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="36" ShadowDepth="8" Color="#000000" Opacity="0.45"/>
+        </Border.Effect>
+        <Grid Margin="18">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/> <!-- 标题与顶栏 -->
+                <RowDefinition Height="*"/>    <!-- 主内容区 -->
+            </Grid.RowDefinitions>
+
+            <!-- 顶部标题栏 -->
+            <Grid Grid.Row="0" Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="⌨️ TypeWords · 键盘肌肉记忆背单词" Foreground="#38BDF8" FontWeight="SemiBold" FontSize="15" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                    <Border Background="#351C2235" BorderBrush="#20FFFFFF" BorderThickness="1" CornerRadius="8" Padding="10,4" VerticalAlignment="Center" Margin="0,0,8,0">
+                        <TextBlock x:Name="HeaderStatsTextBlock" Text="📊 词库: 0 | 📗生词: 0 | 🧠记忆: 0" Foreground="#FBBF24" FontSize="11.5" FontWeight="SemiBold"/>
+                    </Border>
+                    <!-- 词本选择器 -->
+                    <Border Background="#351C2235" BorderBrush="#20FFFFFF" BorderThickness="1" CornerRadius="8" Padding="6,2" Margin="4,0,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="选择本子:" Foreground="#94A3B8" FontSize="11.5" VerticalAlignment="Center" Margin="4,0,4,0"/>
+                            <ComboBox x:Name="BookFilterComboBox" Width="105" Height="26" FontSize="11.5" BorderThickness="0" SelectionChanged="OnBookFilterChanged">
+                                <ComboBoxItem Content="📖 全部词库" Tag="All" IsSelected="True"/>
+                                <ComboBoxItem Content="📗 生词本" Tag="Vocabulary"/>
+                                <ComboBoxItem Content="🧠 记忆本" Tag="Memory"/>
+                            </ComboBox>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- 右侧音效开关与关闭 -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button x:Name="SoundToggleButton" Content="🔊 音效开" Click="OnSoundToggleClick" Background="#35262D42" BorderBrush="#20FFFFFF" BorderThickness="1" Foreground="#38BDF8" Padding="10,4" Margin="0,0,8,0" FontSize="11.5" ToolTip="开关机械键盘击键打字音效"/>
+                    <Button Content="✕" Width="28" Height="28" Background="#35222738" BorderBrush="#1CFFFFFF" BorderThickness="1" Foreground="#94A3B8" Click="OnCloseClick" HorizontalAlignment="Right" ToolTip="关闭窗口"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- 主选项卡 -->
+            <TabControl x:Name="MainTabControl" Grid.Row="1" Background="Transparent" BorderThickness="0" SelectionChanged="OnTabSelectionChanged">
+                <!-- Tab 1: ⌨️ TypeWords 打字记忆核心 -->
+                <TabItem Header="⌨️ TypeWords 打字背单词">
+                    <Grid Margin="0,10,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/> <!-- 模式切换与连对指示 -->
+                            <RowDefinition Height="*"/>    <!-- 核心打字舞台 -->
+                            <RowDefinition Height="Auto"/> <!-- 底部快捷提示与操作 -->
+                        </Grid.RowDefinitions>
+
+                        <!-- 模式切换与指示条 -->
+                        <Grid Grid.Row="0" Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Button x:Name="BtnModePractice" Content="🔤 跟打模式 (强化指法与拼写)" Click="OnPracticeModeClick" Background="#4F46E5" Foreground="#FFFFFF" Padding="13,6" Margin="0,0,8,0" FontWeight="SemiBold"/>
+                                <Button x:Name="BtnModeDictation" Content="✍️ 默写模式 (自测槽位盲打)" Click="OnDictationModeClick" Background="#30202638" BorderBrush="#18FFFFFF" BorderThickness="1" Foreground="#94A3B8" Padding="13,6" FontWeight="SemiBold"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                <Border Background="#30142921" BorderBrush="#351D4D38" BorderThickness="1" CornerRadius="7" Padding="9,4" Margin="0,0,8,0">
+                                    <TextBlock x:Name="TypingStreakTextBlock" Text="🔥 连对: 0" Foreground="#34D399" FontWeight="Bold" FontSize="11.5"/>
+                                </Border>
+                                <Border Background="#301C2436" BorderBrush="#352D3956" BorderThickness="1" CornerRadius="7" Padding="9,4">
+                                    <TextBlock x:Name="TypingWordIndexTextBlock" Text="第 0 / 0 词" Foreground="#38BDF8" FontWeight="SemiBold" FontSize="11.5"/>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- 核心打字舞台 -->
+                        <Border x:Name="TypingStageBorder" Grid.Row="1" Background="#35181C2A" CornerRadius="12" BorderBrush="#20FFFFFF" BorderThickness="1" Padding="20">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/> <!-- 单词槽位展示行 -->
+                                    <RowDefinition Height="Auto"/> <!-- 音标与本子标签 -->
+                                    <RowDefinition Height="*"/>    <!-- 释义与例句 -->
+                                    <RowDefinition Height="Auto"/> <!-- 辅助快捷操作 -->
+                                </Grid.RowDefinitions>
+
+                                <!-- 字母槽位展示区 (TypeWords 核心体验) -->
+                                <StackPanel Grid.Row="0" Margin="0,10,0,14" HorizontalAlignment="Center">
+                                    <!-- 动态生成的字母槽位卡片容器 -->
+                                    <WrapPanel x:Name="WordSlotsPanel" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,8"/>
+                                    
+                                    <!-- 打字提示状态文本 -->
+                                    <TextBlock x:Name="TypingHintTextBlock" Text="直接在键盘敲击字母输入！敲错时槽位会红闪提示" Foreground="#64748B" FontSize="12" HorizontalAlignment="Center"/>
+                                </StackPanel>
+
+                                <!-- 音标与归属本子切换 -->
+                                <Grid Grid.Row="1" Margin="0,0,0,12">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <TextBlock x:Name="TypePhoneticTextBlock" Text="/hæŋ aʊt/" Foreground="#38BDF8" FontSize="15" FontWeight="SemiBold" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                        <Border x:Name="CurrentBookBadge" Background="#1E2B25" CornerRadius="6" Padding="8,3" VerticalAlignment="Center" Margin="0,0,8,0">
+                                            <TextBlock x:Name="CurrentBookTextBlock" Text="📗 生词本" Foreground="#34D399" FontSize="11" FontWeight="SemiBold"/>
+                                        </Border>
+                                        <Button x:Name="SwitchBookButton" Content="⇄ 移至记忆本" Click="OnSwitchCurrentWordBookClick" Background="#22283A" Foreground="#FBBF24" BorderBrush="#353E5B" BorderThickness="1" Padding="10,3" FontSize="11"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <!-- 中文释义、例句与记忆技巧卡片 -->
+                                <Border Grid.Row="2" Background="#35111420" CornerRadius="10" BorderBrush="#1EFFFFFF" BorderThickness="1" Padding="16,14" Margin="0,0,0,10">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <StackPanel>
+                                            <TextBlock Text="【核心释义】" Foreground="#34D399" FontWeight="SemiBold" FontSize="12" Margin="0,0,0,4"/>
+                                            <TextBlock x:Name="TypeMeaningTextBlock" Text="v. (和朋友) 出去玩；闲逛；消磨时光" Foreground="#F8FAFC" FontSize="14.5" FontWeight="SemiBold" Margin="0,0,0,12" TextWrapping="Wrap"/>
+
+                                            <TextBlock Text="【语境例句】" Foreground="#FBBF24" FontWeight="SemiBold" FontSize="12" Margin="0,0,0,4"/>
+                                            <TextBlock x:Name="TypeContextSentenceTextBlock" Text="Let's hang out this weekend!" Foreground="#CBD5E1" FontSize="13" Margin="0,0,0,4" TextWrapping="Wrap"/>
+                                            <TextBlock x:Name="TypeContextTransTextBlock" Text="咱们这个周末聚聚吧！" Foreground="#94A3B8" FontSize="12" Margin="0,0,0,10" TextWrapping="Wrap"/>
+
+                                            <TextBlock Text="【哆啦A梦记忆口诀】" Foreground="#38BDF8" FontWeight="SemiBold" FontSize="12" Margin="0,0,0,4"/>
+                                            <TextBlock x:Name="TypeMemoryTipTextBlock" Text="老外日常最高频口语表达，聚会休闲必备。" Foreground="#7DD3FC" FontSize="12" TextWrapping="Wrap" LineHeight="18"/>
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </Border>
+
+                                <!-- 中间辅助快捷按钮 -->
+                                <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button x:Name="BtnHintPeek" Content="💡 提示下一个字母 (Space)" Click="OnHintPeekClick" Background="#3528324A" Foreground="#FBBF24" BorderBrush="#20FFFFFF" BorderThickness="1" Padding="14,7" Margin="0,0,10,0"/>
+                                    <Button Content="⏭️ 跳过本词 (Esc)" Click="OnSkipWordClick" Background="#3522283A" Foreground="#94A3B8" BorderBrush="#20FFFFFF" BorderThickness="1" Padding="14,7" Margin="0,0,10,0"/>
+                                    <Button Content="🔁 重练本词 (Ctrl+R)" Click="OnRestartCurrentWordClick" Background="#3522283A" Foreground="#94A3B8" BorderBrush="#20FFFFFF" BorderThickness="1" Padding="14,7"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- 打字完成祝贺视图 -->
+                        <Border x:Name="TypingCompletedBorder" Grid.Row="1" Background="#35181C2A" CornerRadius="12" BorderBrush="#3510B981" BorderThickness="1.5" Padding="24" Visibility="Collapsed">
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock Text="🎉" FontSize="46" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                                <TextBlock Text="太棒啦！当前词本打字练习已全部达成！" Foreground="#34D399" FontWeight="Bold" FontSize="19" HorizontalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock x:Name="CompletedSummaryTextBlock" Text="手指肌肉记忆已稳固建立！本次击键准确率 98%" Foreground="#94A3B8" FontSize="13" HorizontalAlignment="Center" Margin="0,0,20,0"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button Content="🔁 重新轮转打一遍" Click="OnRestartAllWordsClick" Background="#4F46E5" Padding="16,8" Margin="0,0,12,0" FontWeight="SemiBold"/>
+                                    <Button Content="✍️ 切换到默写模式" Click="OnDictationModeClick" Background="#059669" Padding="16,8" Margin="0,0,12,0" FontWeight="SemiBold"/>
+                                    <Button Content="📚 浏览词库管理" Click="OnGoToManagerTabClick" Background="#35262D42" BorderBrush="#20FFFFFF" BorderThickness="1" Padding="16,8"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- 底部快捷指引 -->
+                        <Grid Grid.Row="2" Margin="0,8,0,0">
+                            <TextBlock Text="💡 提示: 直接敲键盘输入 | Backspace 退格 | Space 提示 | Esc 跳过" Foreground="#64748B" FontSize="11" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="TypingTotalCountTextBlock" Text="累计击键练习: 0 次" Foreground="#38BDF8" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Grid>
+                </TabItem>
+
+                <!-- Tab 2: 🗂️ 艾宾浩斯复习卡片 -->
+                <TabItem Header="🗂️ 艾宾浩斯复习卡片">
+                    <Grid Margin="0,10,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- 复习进度指示 -->
+                        <Grid Grid.Row="0" Margin="0,0,0,10">
+                            <TextBlock x:Name="ReviewProgressTextBlock" Text="今日复习进度: 0 / 0" Foreground="#38BDF8" FontWeight="SemiBold" FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Text="💡 遵循艾宾浩斯遗忘曲线科学调度" Foreground="#64748B" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- 单词卡片本体 -->
+                        <Border x:Name="FlashcardBorder" Grid.Row="1" Background="#35181C2A" CornerRadius="12" BorderBrush="#20FFFFFF" BorderThickness="1" Padding="24" Margin="0,0,0,12">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock x:Name="CardWordTextBlock" Text="hang out" Foreground="#F8FAFC" FontWeight="Bold" FontSize="28" HorizontalAlignment="Center" Margin="0,0,0,6"/>
+                                    <TextBlock x:Name="CardPhoneticTextBlock" Text="/hæŋ aʊt/" Foreground="#38BDF8" FontSize="15" HorizontalAlignment="Center" Margin="0,0,0,14"/>
+
+                                    <Border Background="#35111420" BorderBrush="#1EFFFFFF" BorderThickness="1" CornerRadius="8" Padding="14,10" Margin="0,0,0,16" MaxWidth="580">
+                                        <TextBlock x:Name="CardContextSentenceTextBlock" Text="Let's hang out this weekend!" Foreground="#CBD5E1" FontSize="13" TextWrapping="Wrap" LineHeight="20" HorizontalAlignment="Center"/>
+                                    </Border>
+
+                                    <StackPanel x:Name="CardBackContentPanel" Visibility="Collapsed">
+                                        <Border Height="1" Background="#2A3249" Margin="0,4,0,14"/>
+                                        <TextBlock Text="【中文释义】" Foreground="#34D399" FontWeight="SemiBold" FontSize="12" Margin="0,0,0,4"/>
+                                        <TextBlock x:Name="CardMeaningTextBlock" Text="v. (和朋友) 出去玩；闲逛；消磨时光" Foreground="#F1F5F9" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,12" TextWrapping="Wrap"/>
+                                        <TextBlock Text="【例句翻译】" Foreground="#FBBF24" FontWeight="SemiBold" FontSize="12" Margin="0,0,0,4"/>
+                                        <TextBlock x:Name="CardContextTransTextBlock" Text="咱们这个周末聚聚吧！" Foreground="#CBD5E1" FontSize="13" Margin="0,0,0,12" TextWrapping="Wrap"/>
+                                        <TextBlock Text="【哆啦A梦记忆魔法】" Foreground="#38BDF8" FontWeight="SemiBold" FontSize="12" Margin="0,0,0,4"/>
+                                        <TextBlock x:Name="CardMemoryTipTextBlock" Text="高频口语词汇，老外日常最爱用的轻松聚会说法。" Foreground="#7DD3FC" FontSize="12" TextWrapping="Wrap" LineHeight="18"/>
+                                    </StackPanel>
+
+                                    <Button x:Name="FlipCardButton" Content="🔍 翻转查看中文释义与记忆诀窍" Click="OnFlipCardClick" Background="#4F46E5" Padding="20,8" Margin="0,16,0,0" FontSize="13" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Border>
+
+                        <Border x:Name="CompletedViewBorder" Grid.Row="1" Background="#35181C2A" CornerRadius="12" BorderBrush="#3510B981" BorderThickness="1.5" Padding="24" Margin="0,0,0,12" Visibility="Collapsed">
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock Text="🎉" FontSize="44" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                                <TextBlock Text="太棒啦！今天的复习任务已全部达成！" Foreground="#34D399" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="坚持艾宾浩斯复习曲线，词汇量稳步飙升！" Foreground="#94A3B8" FontSize="13" HorizontalAlignment="Center" Margin="0,0,18,0"/>
+                                <Button Content="📚 浏览全部词库" Click="OnGoToWordListTabClick" Background="#35262D42" BorderBrush="#20FFFFFF" BorderThickness="1" Padding="16,8" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- 底部记忆反馈按钮栏 -->
+                        <Grid Grid.Row="2">
+                            <StackPanel x:Name="ReviewActionButtonsPanel" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed">
+                                <Button Content="❌ 没记住 (重置复习)" Click="OnReviewForgotClick" Background="#DC2626" Padding="18,8" Margin="0,0,14,0" FontWeight="SemiBold"/>
+                                <Button Content="🤔 模糊记起 (+1~2天)" Click="OnReviewFuzzyClick" Background="#D97706" Padding="18,8" Margin="0,0,14,0" FontWeight="SemiBold"/>
+                                <Button Content="✅ 轻松掌握 (+4~7天)" Click="OnReviewMasteredClick" Background="#059669" Padding="18,8" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </TabItem>
+
+                <!-- Tab 3: 📚 词库与本子管理 -->
+                <TabItem Header="📚 词库与本子管理">
+                    <Grid Margin="0,10,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/> <!-- 搜索与添加栏 -->
+                            <RowDefinition Height="*"/>    <!-- 列表展示 -->
+                        </Grid.RowDefinitions>
+
+                        <!-- 搜索与操作 -->
+                        <Grid Grid.Row="0" Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox x:Name="SearchWordTextBox" Height="32" TextChanged="OnSearchTextChanged" Padding="10,4" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+                            <Button Grid.Column="1" Content="➕ 手动添加新单词" Click="OnAddNewWordClick" Background="#4F46E5" Padding="14,7" FontWeight="SemiBold"/>
+                        </Grid>
+
+                        <!-- 单词列表 -->
+                        <ListBox x:Name="WordsListBox" Grid.Row="1" Background="#30111420" BorderBrush="#1EFFFFFF" BorderThickness="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#38191F30" CornerRadius="8" Padding="12,10" Margin="0,4,0,4" BorderBrush="#20FFFFFF" BorderThickness="1">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Grid.Column="0">
+                                                <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                                    <TextBlock Text="{Binding Word}" FontWeight="Bold" FontSize="15" Foreground="#38BDF8" Margin="0,0,10,0"/>
+                                                    <TextBlock Text="{Binding Phonetic}" Foreground="#94A3B8" FontSize="13" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                                    
+                                                    <!-- 本子标识与切换按钮 -->
+                                                    <Button Content="{Binding BookType}" Tag="{Binding Id}" Click="OnItemBookTypeToggleClick" Background="#262F44" Foreground="#FBBF24" BorderBrush="#364361" BorderThickness="1" Padding="6,2" FontSize="10" Margin="0,0,6,0" ToolTip="点击快速在【生词本】与【记忆本】之间切换"/>
+                                                    
+                                                    <Border Background="#22293C" CornerRadius="4" Padding="6,2" VerticalAlignment="Center">
+                                                        <TextBlock Text="{Binding Tags}" Foreground="#94A3B8" FontSize="10"/>
+                                                    </Border>
+                                                </StackPanel>
+
+                                                <TextBlock Text="{Binding Meaning}" Foreground="#F1F5F9" FontSize="13" Margin="0,0,0,4" TextWrapping="Wrap"/>
+                                                <TextBlock Text="{Binding ContextSentence}" Foreground="#94A3B8" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,2"/>
+                                                
+                                                <!-- 打字练习统计 -->
+                                                <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                                                    <TextBlock Text="⌨️ 击键练习: " Foreground="#64748B" FontSize="11"/>
+                                                    <TextBlock Text="{Binding TypingPracticedCount}" Foreground="#38BDF8" FontWeight="SemiBold" FontSize="11" Margin="0,0,10,0"/>
+                                                    <TextBlock Text="错误: " Foreground="#64748B" FontSize="11"/>
+                                                    <TextBlock Text="{Binding TypingMistakes}" Foreground="#F87171" FontSize="11" Margin="0,0,10,0"/>
+                                                    <TextBlock Text="复习阶段: 阶段 " Foreground="#64748B" FontSize="11"/>
+                                                    <TextBlock Text="{Binding MemoryStage}" Foreground="#FBBF24" FontSize="11"/>
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <!-- 右侧操作 -->
+                                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Button Content="🗑️ 删除" Click="OnDeleteWordClick" Tag="{Binding Id}" Background="Transparent" Foreground="#F87171" Padding="8,4"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </Border>
+</Window>

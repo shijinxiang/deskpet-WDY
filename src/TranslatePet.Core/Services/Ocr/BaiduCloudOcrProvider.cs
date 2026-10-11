@@ -119,6 +119,38 @@ public class BaiduCloudOcrProvider : IOcrProvider
         return null;
     }
 
+    public async Task<(bool Success, string Message)> TestConnectionAsync(string apiKey, string secretKey, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(secretKey))
+        {
+            return (false, "请先填入完整的 API Key 与 Secret Key。");
+        }
+
+        try
+        {
+            var tokenUrl = $"https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id={apiKey.Trim()}&client_secret={secretKey.Trim()}";
+            using var response = await _httpClient.GetAsync(tokenUrl, cancellationToken);
+            var json = await response.Content.ReadAsStringAsync(cancellationToken);
+
+            using var doc = JsonDocument.Parse(json);
+            if (doc.RootElement.TryGetProperty("access_token", out _))
+            {
+                return (true, "✅ 百度智能云鉴权成功！已成功换取 Access Token，OCR 接口连通正常。");
+            }
+
+            if (doc.RootElement.TryGetProperty("error_description", out var errDesc))
+            {
+                return (false, $"❌ 鉴权失败: {errDesc.GetString()}");
+            }
+
+            return (false, $"❌ 鉴权响应未能解析: {json}");
+        }
+        catch (Exception ex)
+        {
+            return (false, $"❌ 网络连接失败: {ex.Message}");
+        }
+    }
+
     private static string MapLanguage(string lang)
     {
         return lang.ToLowerInvariant() switch

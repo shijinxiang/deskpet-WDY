@@ -104,7 +104,7 @@ public class TranslationWorkflow
         }
     }
 
-    public async Task<TranslationResult> TranslateTextAsync(string text, string sourceLang, string targetLang)
+    public async Task<TranslationResult> TranslateTextAsync(string text, string sourceLang, string targetLang, string? customPrompt = null)
     {
         _currentCts?.Cancel();
         _currentCts = new CancellationTokenSource();
@@ -115,7 +115,7 @@ public class TranslationWorkflow
             SetState(WorkflowState.Translating);
             RecognizedText = text;
 
-            var result = await _translationService.TranslateAsync(text, sourceLang, targetLang, ct);
+            var result = await _translationService.TranslateAsync(text, sourceLang, targetLang, customPrompt, ct);
             if (!result.Success)
             {
                 SetState(WorkflowState.Error, result.ErrorMessage);

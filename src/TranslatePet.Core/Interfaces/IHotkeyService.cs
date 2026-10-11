@@ -6,4 +6,5 @@ public interface IHotkeyService : IDisposable
     bool Register(bool alt, bool ctrl, bool shift, bool win, string key);
     void Unregister();
     bool IsRegistered { get; }
+    (bool Success, string Message) ValidateHotkey(bool alt, bool ctrl, bool shift, bool win, string key);
 }

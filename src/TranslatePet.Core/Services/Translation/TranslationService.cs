@@ -24,7 +24,7 @@ public class TranslationService : ITranslationService
         }
     }
 
-    public async Task<TranslationResult> TranslateAsync(string text, string sourceLang, string targetLang, CancellationToken cancellationToken = default)
+    public async Task<TranslationResult> TranslateAsync(string text, string sourceLang, string targetLang, string? customPrompt = null, CancellationToken cancellationToken = default)
     {
         var providerId = _settingsService.CurrentSettings.TranslationProvider;
         if (!_providers.TryGetValue(providerId, out var provider))
@@ -37,6 +37,6 @@ public class TranslationService : ITranslationService
             return TranslationResult.Failed(text, "系统中未配置可用的翻译提供方。", sourceLang, targetLang);
         }
 
-        return await provider.TranslateAsync(text, sourceLang, targetLang, cancellationToken);
+        return await provider.TranslateAsync(text, sourceLang, targetLang, customPrompt, cancellationToken);
     }
 }

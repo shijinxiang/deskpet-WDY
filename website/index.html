@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TranslatePet 哆啦A梦桌宠翻译伴侣 - 官方介绍与接口文档</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="assets/frame_0.png" type="image/png">
+</head>
+<body>
+
+  <!-- 顶部导航栏 -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">
+        <img src="assets/frame_0.png" alt="Doraemon Logo">
+        <span>TranslatePet</span>
+        <span class="logo-badge">v2.0 AI</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features" class="active">核心功能</a></li>
+        <li><a href="#conversational">地道口语</a></li>
+        <li><a href="#vocabulary">艾宾浩斯单词</a></li>
+        <li><a href="#prompts">专属提示词</a></li>
+        <li><a href="#api">开放接口</a></li>
+        <li><a href="#guide">使用指南</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="#guide" class="btn btn-primary btn-sm">🚀 快速上手</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 英雄展示区 -->
+  <section class="hero-section">
+    <div class="hero-container">
+      <div class="hero-content">
+        <div class="hero-badge-tag">
+          <span>✨ 2026 全新升级 · 大模型母语级社交翻译伴侣</span>
+        </div>
+        <h1 class="hero-title">
+          让桌面拥有温度<br>
+          让跨语言沟通<span class="hero-highlight">如母语般顺畅</span>
+        </h1>
+        <p class="hero-desc">
+          基于大语言模型深度提示词工程的 Q版哆啦A梦桌面伴侣。打破机械生硬的机翻壁垒，专为社交聊天与日常对话定制；内嵌科学艾宾浩斯抗遗忘记忆法，陪伴你的每一天英语进阶之路。
+        </p>
+        <div class="hero-buttons">
+          <a href="#conversational" class="btn btn-primary">体验地道口语翻译</a>
+          <a href="#vocabulary" class="btn btn-secondary">查看艾宾浩斯生词本</a>
+          <a href="#api" class="btn btn-secondary">开发者接口文档</a>
+        </div>
+        <div class="hero-highlights-list">
+          <div class="highlight-item"><span class="icon">🗣️</span><span>地道母语社交口语翻译</span></div>
+          <div class="highlight-item"><span class="icon">🧠</span><span>艾宾浩斯遗忘曲线抗遗忘</span></div>
+          <div class="highlight-item"><span class="icon">🤖</span><span>5套专属提示词全开放定制</span></div>
+          <div class="highlight-item"><span class="icon">⚡</span><span>全局防冲突热键毫秒响应</span></div>
+        </div>
+      </div>
+
+      <!-- 右侧：哆啦A梦交互视窗 -->
+      <div class="hero-visual">
+        <div class="pet-interactive-showcase">
+          <div class="pet-screen" id="petScreen" title="点击与哆啦A梦互动！">
+            <div class="pet-bubble" id="petBubbleText">大雄，今天背单词了吗？🐱</div>
+            <img id="petFrameImg" class="pet-frame-img" src="assets/frame_0.png" alt="哆啦A梦桌宠帧动画">
+          </div>
+          <div class="pet-controls">
+            <button id="btnPlayPausePet" class="btn btn-secondary btn-sm">⏸️ 暂停动画</button>
+            <button id="btnEatDorayaki" class="btn btn-primary btn-sm">🥞 喂吃铜锣烧</button>
+            <button id="btnPeekEdge" class="btn btn-secondary btn-sm">🧲 模拟边缘探头</button>
+          </div>
+          <div class="pet-status-badge">
+            <span class="pulse-dot"></span>
+            <span>桌面伴侣常驻运行中 (Win32 Alpha-Blended)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 核心特性展示 -->
+  <section id="features" class="section">
+    <div class="section-header">
+      <span class="section-tag">Features Overview</span>
+      <h2 class="section-title">为高效沟通与语言学习而生</h2>
+      <p class="section-subtitle">告别冰冷的翻译工具，集“AI 伴侣、地道翻译、单词复习、开放架构”于一体</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">🗣️</div>
+        <h3>真实口语与俚语翻译</h3>
+        <p>
+          专为与外国友人聊天、社交平台（Discord/Telegram/Twitter）及日常口语打造。自动解析文化背景与俚语，输出地道母语表达及实用表达小贴士，摒弃生硬字面直译。
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">📚</div>
+        <h3>艾宾浩斯智能记单词</h3>
+        <p>
+          遵循 1, 2, 4, 7, 15, 30 天记忆衰减周期科学调度复习；每次划词翻译一键收藏生词，每天定时托盘气泡提醒，配备趣味词根/词源与记忆口诀。
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">🤖</div>
+        <h3>专属提示词预设与定制</h3>
+        <p>
+          每项核心功能内置专属原生级系统 Prompt（地道口语、标准严谨、商务公文、生词提炼、深度助记）。所有提示词源于默认配置文件，用户可在设置面板中随意魔改并一键还原。
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">⚡</div>
+        <h3>快捷键划词与 OCR 截图</h3>
+        <p>
+          具备 Win32 底层全局热键安全检测与防冲突机制；支持单键（如 F4）、组合键（如 Alt+Q）自由绑定，自动捕获屏幕与剪贴板文本，毫秒级呼出翻译浮窗。
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">🐱</div>
+        <h3>灵动 Q 版哆啦A梦桌宠</h3>
+        <p>
+          透明通道无边框物理渲染，内置平滑的 8 帧吃铜锣烧与待机眨眼动画。支持鼠标拖拽自由停靠、智能右键托盘菜单与轻量级低资源占用。
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">🧲</div>
+        <h3>桌面边缘吸附与趣味探头动画</h3>
+        <p>
+          当把桌宠拖曳至屏幕左右边缘时，自动触发边缘吸附停靠。哆啦A梦会藏身于屏幕边界外侧，探出圆圆的脑袋好奇张望；鼠标悬停即刻欢快探出身子招手互动，且可在设置面板中自由开启或关闭。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 地道口语对比演示 -->
+  <section id="conversational" class="section">
+    <div class="section-header">
+      <span class="section-tag">Authentic Conversational Translation</span>
+      <h2 class="section-title">告别尴尬机翻，与外国友人顺畅畅聊</h2>
+      <p class="section-subtitle">看看传统字面硬译与 TranslatePet 地道口语模式的直观差异</p>
+    </div>
+
+    <div class="demo-box">
+      <div class="demo-toolbar">
+        <div class="demo-title">
+          <span>💬 点击切换真实交流场景：</span>
+        </div>
+        <div class="demo-pills">
+          <button class="pill-btn active" data-demo="down">"I'm down for that"</button>
+          <button class="pill-btn" data-demo="break">"Break a leg"</button>
+          <button class="pill-btn" data-demo="touchbase">"Let's touch base"</button>
+          <button class="pill-btn" data-demo="weather">"Under the weather"</button>
+          <button class="pill-btn" data-demo="onme">"Lunch is on me"</button>
+        </div>
+      </div>
+
+      <div class="demo-comparison">
+        <div class="demo-column demo-col-bad">
+          <div class="demo-col-header">
+            <span class="demo-tag-bad">❌ 传统机械直译</span>
+            <span style="font-size: 0.85rem; color: #64748b;">死板硬套 / 极易误解</span>
+          </div>
+          <div class="demo-input-text" id="demoSourceText">Are you coming tonight? — I'm down for that!</div>
+          <div class="demo-trans-result" style="color: #b91c1c;" id="demoLiteralResult">
+            你今晚来吗？—— 我为此而向下！
+          </div>
+          <p style="color: #64748b; font-size: 0.9rem;" id="demoLiteralComment">
+            字面直译不知所云，误将 down 理解为向下方位，无法传达社交认同感。
+          </p>
+        </div>
+
+        <div class="demo-column demo-col-good">
+          <div class="demo-col-header">
+            <span class="demo-tag-good">✅ TranslatePet 地道口语模式</span>
+            <span style="font-size: 0.85rem; color: #15803d;">母语语境 / 俚语自然融入</span>
+          </div>
+          <div class="demo-trans-result" style="color: #15803d;" id="demoNaturalResult">
+            今晚你来吗？—— 算我一个，我肯定去！
+          </div>
+          <div class="demo-tip-card" id="demoTipText">
+            💡 社交口语解析：'be down for something' 在北美日常口语中表示'完全赞同、极乐意加入'。地道替换词还有：'Count me in!' 或 'I'm in!'
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 艾宾浩斯生词本与复习 -->
+  <section id="vocabulary" class="section">
+    <div class="section-header">
+      <span class="section-tag">Spaced Repetition System</span>
+      <h2 class="section-title">艾宾浩斯抗遗忘记忆法</h2>
+      <p class="section-subtitle">把每一次划词查到的生词，转化为你真正掌握的永久语料库</p>
+    </div>
+
+    <div class="vocab-demo-container">
+      <!-- 翻转生词卡片演示 -->
+      <div class="flashcard-wrapper">
+        <div class="flashcard" id="demoFlashcard">
+          <!-- 正面 -->
+          <div class="flashcard-face flashcard-front">
+            <div class="card-top-meta">
+              <span class="card-stage-pill" id="cardStage">第 1 阶段（初始录入）</span>
+              <span style="font-size: 0.85rem; color: #64748b;">📖 艾宾浩斯智能复习卡</span>
+            </div>
+            <div>
+              <div class="card-word-title" id="cardWord">serendipity</div>
+              <div class="card-phonetic" id="cardPhonetic">/ˌserənˈdɪpəti/</div>
+              <div class="card-example-box" id="cardExample">
+                Meeting you here was pure serendipity. (在这里遇见你真是奇妙的意外之喜。)
+              </div>
+            </div>
+            <div class="card-flip-prompt">
+              👉 点击卡片任何区域翻面查看释义与助记诀窍
+            </div>
+          </div>
+
+          <!-- 背面 -->
+          <div class="flashcard-face flashcard-back">
+            <div class="card-top-meta">
+              <span class="card-stage-pill" style="background: rgba(16, 185, 129, 0.15); color: #059669;">释义与联想记忆</span>
+              <button class="btn btn-secondary btn-sm card-btn-action" id="btnFlipCard">翻回正面</button>
+            </div>
+            <div>
+              <div class="card-meaning" id="cardDef">n. 机缘巧合；意外发现珍宝的运气与福气</div>
+              <div class="card-memory-hack" id="cardHack">
+                💡 词源记忆法：源自古波斯童话《锡兰三王子》(The Three Princes of Serendip)，主人公们总是在漫游中意外发现美好的东西。记忆：Seren (平静) + dip (探寻) = 意外邂逅的惊喜！
+              </div>
+            </div>
+            <div>
+              <div style="font-size: 0.82rem; color: #64748b; margin-bottom: 8px;">本次复习掌握程度反馈：</div>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-secondary btn-sm card-feedback-btn card-btn-action" data-feedback="forgot" style="color: #dc2626; border-color: #fca5a5;">❌ 完全遗忘</button>
+                <button class="btn btn-secondary btn-sm card-feedback-btn card-btn-action" data-feedback="good" style="color: #d97706; border-color: #fcd34d;">🤔 有些模糊</button>
+                <button class="btn btn-primary btn-sm card-feedback-btn card-btn-action" data-feedback="easy" style="background: #10b981;">💪 完全掌握</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右侧：艾宾浩斯复习阶梯 -->
+      <div class="ebbinghaus-timeline">
+        <div class="timeline-step">
+          <div class="step-day-badge">0天</div>
+          <div class="step-info">
+            <h4>初始学习 (Phase 0)</h4>
+            <p>通过划词或截图首次查词并点击【⭐ 收藏生词】，立即进入待复习队列。</p>
+          </div>
+        </div>
+        <div class="timeline-step">
+          <div class="step-day-badge">1天</div>
+          <div class="step-info">
+            <h4>第 1 次遗忘临界点 (Phase 1)</h4>
+            <p>24 小时后托盘气泡准时弹出，进行第一次回想强化，建立突触连接。</p>
+          </div>
+        </div>
+        <div class="timeline-step">
+          <div class="step-day-badge">2~4天</div>
+          <div class="step-info">
+            <h4>第 2~3 次巩固期 (Phase 2 & 3)</h4>
+            <p>间隔按 2 天、4 天翻倍扩展，将短期记忆逐步转化为中长期工作记忆。</p>
+          </div>
+        </div>
+        <div class="timeline-step">
+          <div class="step-day-badge">7~30天</div>
+          <div class="step-info">
+            <h4>终身永久掌握 (Phase 4 ~ 6)</h4>
+            <p>跨越 7、15、30 天仍能正确回想的单词，系统正式判定为完全掌握！</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 专属提示词工厂 -->
+  <section id="prompts" class="section">
+    <div class="section-header">
+      <span class="section-tag">Prompt Engineering Factory</span>
+      <h2 class="section-title">全功能专属提示词，源于默认亦可自由魔改</h2>
+      <p class="section-subtitle">所有的提示词均已注册在配置文件中，你可以直接在【设置 -> 专属提示词定制】中编辑调优</p>
+    </div>
+
+    <div class="prompts-tab-container">
+      <div class="tab-headers">
+        <button class="tab-btn active" data-tab="tab-conversational">🗣️ 地道口语提示词</button>
+        <button class="tab-btn" data-tab="tab-standard">📖 标准通用提示词</button>
+        <button class="tab-btn" data-tab="tab-formal">💼 商务公文提示词</button>
+        <button class="tab-btn" data-tab="tab-extract">🔍 生词提炼提示词</button>
+        <button class="tab-btn" data-tab="tab-explain">💡 深度助记提示词</button>
+      </div>
+
+      <div class="tab-body">
+        <!-- 地道口语 -->
+        <div class="prompt-content-view active" id="tab-conversational">
+          <p style="margin-bottom: 1rem; color: #64748b; font-size: 0.95rem;">
+            <strong>功能定位：</strong>专为社交聊天、Discord/Telegram 与外国友人交流打造。摒弃生硬字面直译，输出地道母语口语，并在末尾附加地道表达小贴士。
+          </p>
+          <div class="code-box">
+            <button class="copy-code-btn">📋 复制提示词</button>
+            <pre><code>你是一位精通跨文化交流与母语级英语日常口语的高级翻译家。
+任务：将用户提供的文本翻译为自然、生动、符合母语日常对话习惯的地道表达。
+
+翻译准则：
+1. 彻底摒弃生硬、逐字对应的机械翻译，使用当代英语母语者在日常社交、Discord/Slack聊天、发短信或面对面闲聊时真正会说的地道口语与俚语。
+2. 准确识别并地道转换常见英文缩写、流行俗语及隐喻（如 'I'm down', 'no biggie', 'touch base'）。
+3. 保持轻松自然的人际交流语气，避免过于严肃的书面官僚语调。
+4. 在译文后，若遇到值得学习的地道词汇、习语或文化背景，请以 '💡 地道表达小贴士：' 简短附上 1-2 句用法说明。</code></pre>
+          </div>
+        </div>
+
+        <!-- 标准通用 -->
+        <div class="prompt-content-view" id="tab-standard">
+          <p style="margin-bottom: 1rem; color: #64748b; font-size: 0.95rem;">
+            <strong>功能定位：</strong>忠实原文、术语严谨、信达雅，适用于阅读科技文献、技术文档及中立通用场景。
+          </p>
+          <div class="code-box">
+            <button class="copy-code-btn">📋 复制提示词</button>
+            <pre><code>你是一位严谨专业的高级多语言翻译专家。
+任务：将用户输入的文本准确、流畅地翻译为目标语言。
+
+翻译准则：
+1. 严格忠实原文语义，确保术语准确、逻辑清晰、行文通畅。
+2. 符合目标语言的标准书面表达规范，做到信、达、雅。
+3. 保持客观中立语调，不遗漏任何关键事实与技术概念。
+4. 仅输出最终的高质量翻译结果，无需多余寒暄。</code></pre>
+          </div>
+        </div>
+
+        <!-- 商务公文 -->
+        <div class="prompt-content-view" id="tab-formal">
+          <p style="margin-bottom: 1rem; color: #64748b; font-size: 0.95rem;">
+            <strong>功能定位：</strong>商业邮件、合同契约、跨国正式汇报。用词典雅体面，展现专业职场素养。
+          </p>
+          <div class="code-box">
+            <button class="copy-code-btn">📋 复制提示词</button>
+            <pre><code>你是一位资深的跨国企业商务与法律文书翻译专家。
+任务：将用户提供的文本转换为得体、正式、高水准的职场商务或公文表达。
+
+翻译准则：
+1. 采用专业、典雅、规范的商务书面语体（Business Professional）。
+2. 用词礼貌得体，结构严整，展现专业职场素养。
+3. 准确转换商业术语与公文惯用套语。
+4. 仅输出优化后的商务译文。</code></pre>
+          </div>
+        </div>
+
+        <!-- 生词提炼 -->
+        <div class="prompt-content-view" id="tab-extract">
+          <p style="margin-bottom: 1rem; color: #64748b; font-size: 0.95rem;">
+            <strong>功能定位：</strong>在用户划词或长句翻译后，智能提炼 1~3 个最具学习价值的生词/短语，并附带音标与中文简释。
+          </p>
+          <div class="code-box">
+            <button class="copy-code-btn">📋 复制提示词</button>
+            <pre><code>你是一位英语词汇学专家。
+任务：从用户输入的文本中，提炼出 1-3 个最值得学习的重点词汇、地道短语或生词，并给出音标与中文简释。
+输出格式要求每行一个：[单词/短语] | [音标] | [中文简释]</code></pre>
+          </div>
+        </div>
+
+        <!-- 深度助记 -->
+        <div class="prompt-content-view" id="tab-explain">
+          <p style="margin-bottom: 1rem; color: #64748b; font-size: 0.95rem;">
+            <strong>功能定位：</strong>为生词生成词根词缀、趣味联想/谐音以及跨文化典故，帮助用户极速深刻记住单词。
+          </p>
+          <div class="code-box">
+            <button class="copy-code-btn">📋 复制提示词</button>
+            <pre><code>你是一位幽默博学的词源与记忆法专家。
+任务：为用户指定的生词生成 1 句生动有趣的【联想/词根词缀/谐音记忆口诀】，以及 1 个地道高频的母语对话例句（含中文译文）。</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 开放接口与系统架构 -->
+  <section id="api" class="section">
+    <div class="section-header">
+      <span class="section-tag">API & Architecture Reference</span>
+      <h2 class="section-title">系统架构与开放接口规范</h2>
+      <p class="section-subtitle">模块化低耦合设计，无论是扩展翻译源还是集成到第三方应用，均极为轻松</p>
+    </div>
+
+    <div class="api-section">
+      <!-- 接口 1: ITranslationService & ITranslationProvider -->
+      <div class="api-card">
+        <span class="api-badge">TranslatePet.Core.Interfaces.ITranslationService</span>
+        <h3 class="api-title">核心翻译服务接口 (ITranslationService)</h3>
+        <p class="api-desc">
+          提供跨语言翻译调度。支持通过 <code>TranslationStyle</code> 切换口语/标准/商务模式，并支持动态注入自定义 Prompt。
+        </p>
+
+        <div class="code-box">
+          <button class="copy-code-btn">📋 复制契约</button>
+          <pre><code>public interface ITranslationService
+{
+    /// &lt;summary&gt;
+    /// 执行文本翻译
+    /// &lt;/summary&gt;
+    /// &lt;param name="text"&gt;待翻译源文本&lt;/param&gt;
+    /// &lt;param name="sourceLang"&gt;源语言（如 "auto", "en", "zh-CN"）&lt;/param&gt;
+    /// &lt;param name="targetLang"&gt;目标语言（如 "zh-CN", "en"）&lt;/param&gt;
+    /// &lt;param name="style"&gt;翻译风格：Conversational, Standard, Formal&lt;/param&gt;
+    /// &lt;param name="customPrompt"&gt;可选动态注入的专属提示词（留空使用系统配置）&lt;/param&gt;
+    /// &lt;param name="cancellationToken"&gt;取消令牌&lt;/param&gt;
+    Task&lt;TranslationResult&gt; TranslateAsync(
+        string text,
+        string sourceLang,
+        string targetLang,
+        TranslationStyle style = TranslationStyle.Conversational,
+        string? customPrompt = null,
+        CancellationToken cancellationToken = default);
+}</code></pre>
+        </div>
+
+        <table class="api-params-table">
+          <thead>
+            <tr>
+              <th>参数名</th>
+              <th>类型</th>
+              <th>说明</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>text</code></td>
+              <td><code>string</code></td>
+              <td>需要翻译的原始文本，支持多行与各类长短句。</td>
+            </tr>
+            <tr>
+              <td><code>style</code></td>
+              <td><code>TranslationStyle</code></td>
+              <td>枚举值：<code>Conversational</code>(口语地道, 默认), <code>Standard</code>(通用标准), <code>Formal</code>(商务正式)。</td>
+            </tr>
+            <tr>
+              <td><code>customPrompt</code></td>
+              <td><code>string?</code></td>
+              <td>可覆盖默认系统 Prompt 的定制提示词，实现高度个性化控制。</td>
+            </tr>
+            <tr>
+              <td><code>TranslationResult</code></td>
+              <td><code>class</code></td>
+              <td>包含 <code>TranslatedText</code>(译文), <code>DetectedLanguage</code>, <code>ProviderName</code>, <code>LatencyMs</code> 等字段。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 接口 2: IVocabularyService -->
+      <div class="api-card">
+        <span class="api-badge">TranslatePet.Core.Interfaces.IVocabularyService</span>
+        <h3 class="api-title">艾宾浩斯生词本与复习服务 (IVocabularyService)</h3>
+        <p class="api-desc">
+          负责生词持久化（<code>vocabulary.json</code>）、艾宾浩斯抗遗忘记忆曲线调度算法、复习反馈与每日统计。
+        </p>
+
+        <div class="code-box">
+          <button class="copy-code-btn">📋 复制契约</button>
+          <pre><code>public interface IVocabularyService
+{
+    /// &lt;summary&gt;获取当前已到期需要复习的单词列表&lt;/summary&gt;
+    Task&lt;IReadOnlyList&lt;VocabularyItem&gt;&gt; GetDueWordsAsync(int limit = 20);
+
+    /// &lt;summary&gt;记录一次复习反馈并依据艾宾浩斯曲线计算下一次复习时间&lt;/summary&gt;
+    Task RecordReviewAsync(string id, ReviewFeedback feedback);
+
+    /// &lt;summary&gt;收藏新单词到生词库&lt;/summary&gt;
+    Task&lt;VocabularyItem&gt; AddWordAsync(
+        string word,
+        string definition,
+        string phonetic = "",
+        string contextSentence = "",
+        string contextTranslation = "",
+        string memoryHack = "");
+
+    /// &lt;summary&gt;获取生词本全局统计数据&lt;/summary&gt;
+    Task&lt;VocabularyStats&gt; GetStatsAsync();
+}</code></pre>
+        </div>
+
+        <table class="api-params-table">
+          <thead>
+            <tr>
+              <th>反馈类型 (ReviewFeedback)</th>
+              <th>算法行为</th>
+              <th>复习周期推进</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>Remembered (完全记住)</code></td>
+              <td><code>ReviewStage + 1</code>, 连续正确次数 + 1</td>
+              <td>依次按 1天 -> 2天 -> 4天 -> 7天 -> 15天 -> 30天 排程</td>
+            </tr>
+            <tr>
+              <td><code>Fuzzy (有些模糊)</code></td>
+              <td>保持当前 Stage，不向上晋级</td>
+              <td>固定在 1~2 天内再次触发复习</td>
+            </tr>
+            <tr>
+              <td><code>Forgotten (完全遗忘)</code></td>
+              <td><code>ReviewStage</code> 重置回退为 0</td>
+              <td>安排在 12 小时内紧急重温强化</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 接口 3: IOcrService & IHotkeyService -->
+      <div class="api-card">
+        <span class="api-badge">TranslatePet.Core.Interfaces.IOcrService & IHotkeyService</span>
+        <h3 class="api-title">离线 OCR 识别与全局热键管理</h3>
+        <p class="api-desc">
+          本地 PaddleOCR 离线图像识别模型与 Win32 原生 <code>RegisterHotKey</code> 全局安全防冲突绑定。
+        </p>
+
+        <div class="code-box">
+          <button class="copy-code-btn">📋 复制契约</button>
+          <pre><code>// 离线多语言光学字符识别服务
+public interface IOcrService
+{
+    Task&lt;string&gt; RecognizeAsync(Bitmap image, CancellationToken cancellationToken = default);
+}
+
+// Win32 底层全局热键管理器
+public interface IHotkeyService : IDisposable
+{
+    bool Register(string id, ModifierKeys modifiers, Key key, Action callback);
+    void Unregister(string id);
+    bool IsRegistered(string id);
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 使用说明与配置指南 -->
+  <section id="guide" class="section">
+    <div class="section-header">
+      <span class="section-tag">Quick Start & Configuration</span>
+      <h2 class="section-title">新手使用说明与配置指南</h2>
+      <p class="section-subtitle">仅需三步，开启丝滑的桌宠翻译与背单词体验</p>
+    </div>
+
+    <div class="steps-container">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3>启动桌宠与呼出菜单</h3>
+        <p>
+          双击运行 <code>TranslatePet.UI.exe</code>，可爱的哆啦A梦桌宠将直接出现在桌面右下角。右键点击桌宠可呼出主菜单：
+          <br>• 📚 单词本与每日复习
+          <br>• ⚙️ 系统设置面板
+          <br>• 退出桌宠
+        </p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3>配置大模型翻译密钥</h3>
+        <p>
+          进入【设置 -> 翻译源设置】：
+          <br>• <strong>API 端点：</strong>填入兼容 OpenAI 规范的 BaseUrl（如 DeepSeek <code>https://api.deepseek.com/v1</code> 或硅基流动、Kimi）
+          <br>• <strong>模型名称：</strong><code>deepseek-chat</code> / <code>gpt-4o-mini</code>
+          <br>• <strong>API 密钥：</strong>填入对应平台的 API Key
+        </p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3>设置全局快捷键与划词</h3>
+        <p>
+          进入【设置 -> 快捷键与提醒】：
+          <br>• <strong>划词翻译：</strong>默认推荐 <code>F4</code>（单键极速触发）
+          <br>• <strong>截图翻译：</strong>默认推荐 <code>Alt + Q</code>
+          <br>• 在任何软件中选中外语文本，按下 <code>F4</code>，即刻呼出精美翻译弹窗！
+        </p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <h3>定制专属提示词与每日提醒</h3>
+        <p>
+          进入【设置 -> 专属提示词定制】：
+          <br>• 5 种模式对应的 Prompt 随意修改，支持【恢复默认配置】。
+          <br>• 勾选【开启每日背单词提醒】，设定每日提醒时间（如 <code>20:00</code>）和复习目标（如 20 词）。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <h2>TranslatePet (哆啦A梦桌宠翻译伴侣)</h2>
+        <p style="margin-top: 0.5rem; line-height: 1.6;">
+          融合大语言模型提示词工程与桌面交互艺术，专为跨文化沟通与高效语言学习者研发。
+        </p>
+      </div>
+      <div class="footer-links">
+        <h4>快速导航</h4>
+        <ul>
+          <li><a href="#features">核心功能一览</a></li>
+          <li><a href="#conversational">真实口语对比</a></li>
+          <li><a href="#vocabulary">艾宾浩斯复习</a></li>
+          <li><a href="#prompts">5 套专属提示词</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>技术规范</h4>
+        <ul>
+          <li><a href="#api">ITranslationService 接口</a></li>
+          <li><a href="#api">IVocabularyService 接口</a></li>
+          <li><a href="#guide">快捷键冲突排查说明</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 TranslatePet Open Platform. Built with .NET 8 WPF & Modern Web Technologies.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

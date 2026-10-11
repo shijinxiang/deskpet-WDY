@@ -62,6 +62,7 @@ public class TrayIconManager : IDisposable
     private bool _isCreated;
 
     public event EventHandler? RequestCapture;
+    public event EventHandler? RequestVocabulary;
     public event EventHandler? RequestTogglePet;
     public event EventHandler? RequestSettings;
     public event EventHandler? RequestExit;
@@ -87,6 +88,9 @@ public class TrayIconManager : IDisposable
         var captureItem = new MenuItem { Header = "🔍 截图翻译 (快捷键)" };
         captureItem.Click += (s, e) => RequestCapture?.Invoke(this, EventArgs.Empty);
 
+        var vocabularyItem = new MenuItem { Header = "📚 单词本与每日复习" };
+        vocabularyItem.Click += (s, e) => RequestVocabulary?.Invoke(this, EventArgs.Empty);
+
         var togglePetItem = new MenuItem { Header = "🐾 显示 / 隐藏桌宠" };
         togglePetItem.Click += (s, e) => RequestTogglePet?.Invoke(this, EventArgs.Empty);
 
@@ -97,6 +101,7 @@ public class TrayIconManager : IDisposable
         exitItem.Click += (s, e) => RequestExit?.Invoke(this, EventArgs.Empty);
 
         _contextMenu.Items.Add(captureItem);
+        _contextMenu.Items.Add(vocabularyItem);
         _contextMenu.Items.Add(togglePetItem);
         _contextMenu.Items.Add(new Separator { Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0x35, 0x38, 0x44)) });
         _contextMenu.Items.Add(settingsItem);

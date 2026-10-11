@@ -37,7 +37,14 @@ public class OcrService : IOcrService
         var providerId = _settingsService.CurrentSettings.OcrProvider;
         if (!_providers.TryGetValue(providerId, out var provider))
         {
-            provider = _providers.Values.FirstOrDefault();
+            if (_providers.TryGetValue("WindowsNative", out var nativeFallback))
+            {
+                provider = nativeFallback;
+            }
+            else
+            {
+                provider = _providers.Values.FirstOrDefault();
+            }
         }
 
         if (provider == null)
@@ -45,6 +52,34 @@ public class OcrService : IOcrService
             return OcrResult.Failed("系统中未注册可用的 OCR 识别引擎。");
         }
 
-        return await provider.RecognizeTextAsync(imageBytes, language, cancellationToken);
+        // 如果配置了百度云但未填写 API 凭据，自动无缝降级为 Windows 本地原生 OCR
+        if (provider.ProviderId.Equals("BaiduCloud", StringComparison.OrdinalIgnoreCase))
+        {
+            var s = _settingsService.CurrentSettings;
+            if (string.IsNullOrWhiteSpace(s.BaiduOcrApiKey) || string.IsNullOrWhiteSpace(s.BaiduOcrSecretKey))
+            {
+                if (_providers.TryGetValue("WindowsNative", out var nativeFallback))
+                {
+                    return await nativeFallback.RecognizeTextAsync(imageBytes, language, cancellationToken);
+                }
+            }
+        }
+
+        var result = await provider.RecognizeTextAsync(imageBytes, language, cancellationToken);
+
+        // 如果百度云失败，尝试本地原生 OCR 智能兜底
+        if (!result.Success && provider.ProviderId.Equals("BaiduCloud", StringComparison.OrdinalIgnoreCase))
+        {
+            if (_providers.TryGetValue("WindowsNative", out var nativeFallback))
+            {
+                var fallbackResult = await nativeFallback.RecognizeTextAsync(imageBytes, language, cancellationToken);
+                if (fallbackResult.Success)
+                {
+                    return fallbackResult;
+                }
+            }
+        }
+
+        return result;
     }
 }

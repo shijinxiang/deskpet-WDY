@@ -35,57 +35,65 @@
         <!-- 选区边框与交互框 -->
         <Canvas x:Name="SelectionCanvas">
             <Border x:Name="SelectionBorder"
-                    BorderBrush="#00E5FF"
+                    BorderBrush="#38BDF8"
                     BorderThickness="2"
                     Background="Transparent"
+                    CornerRadius="3"
                     Visibility="Collapsed">
                 <Border.Effect>
-                    <DropShadowEffect BlurRadius="8" Color="#00E5FF" Opacity="0.8" ShadowDepth="0"/>
+                    <DropShadowEffect BlurRadius="10" Color="#38BDF8" Opacity="0.65" ShadowDepth="0"/>
                 </Border.Effect>
             </Border>
 
             <!-- 浮动操作栏 -->
             <Border x:Name="ActionBar"
                     Visibility="Collapsed"
-                    Background="#1E1E28"
-                    CornerRadius="6"
-                    Padding="8,5"
-                    BorderBrush="#3D3E52"
+                    Background="#D0141724"
+                    CornerRadius="9"
+                    Padding="10,6"
                     BorderThickness="1">
+                <Border.BorderBrush>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#45FFFFFF" Offset="0"/>
+                        <GradientStop Color="#18FFFFFF" Offset="0.5"/>
+                        <GradientStop Color="#152C334A" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.BorderBrush>
                 <Border.Effect>
-                    <DropShadowEffect BlurRadius="12" Color="#000000" Opacity="0.5" ShadowDepth="3"/>
+                    <DropShadowEffect BlurRadius="24" Color="#000000" Opacity="0.55" ShadowDepth="4"/>
                 </Border.Effect>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock x:Name="SizeTextBlock" Text="0 × 0" Foreground="#AAAAAA" FontSize="12" VerticalAlignment="Center" Margin="4,0,12,0"/>
+                    <TextBlock x:Name="SizeTextBlock" Text="0 × 0" Foreground="#94A3B8" FontSize="12" VerticalAlignment="Center" Margin="4,0,12,0"/>
 
                     <Button Content="✅ 确认识别 (Enter)"
                             Click="OnConfirmClick"
-                            Background="#536DFE"
+                            Background="#4F46E5"
                             Foreground="#FFFFFF"
                             BorderThickness="0"
-                            Padding="10,4"
+                            Padding="12,5"
                             Cursor="Hand"
                             FontWeight="SemiBold"
                             FontSize="12"
                             Margin="0,0,6,0">
                         <Button.Resources>
                             <Style TargetType="Border">
-                                <Setter Property="CornerRadius" Value="4"/>
+                                <Setter Property="CornerRadius" Value="6"/>
                             </Style>
                         </Button.Resources>
                     </Button>
 
                     <Button Content="❌ 取消 (Esc)"
                             Click="OnCancelClick"
-                            Background="#323444"
-                            Foreground="#E0E0E0"
-                            BorderThickness="0"
-                            Padding="10,4"
+                            Background="#35262D42"
+                            BorderBrush="#1CFFFFFF"
+                            BorderThickness="1"
+                            Foreground="#94A3B8"
+                            Padding="12,5"
                             Cursor="Hand"
                             FontSize="12">
                         <Button.Resources>
                             <Style TargetType="Border">
-                                <Setter Property="CornerRadius" Value="4"/>
+                                <Setter Property="CornerRadius" Value="6"/>
                             </Style>
                         </Button.Resources>
                     </Button>
@@ -98,14 +106,20 @@
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Top" 
                 Margin="0,30,0,0" 
-                Background="#D0181824" 
-                CornerRadius="8" 
-                Padding="16,8"
-                BorderBrush="#40FFFFFF"
+                Background="#D0141724" 
+                CornerRadius="9" 
+                Padding="16,9"
                 BorderThickness="1">
+            <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#45FFFFFF" Offset="0"/>
+                    <GradientStop Color="#18FFFFFF" Offset="0.5"/>
+                    <GradientStop Color="#152C334A" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.BorderBrush>
             <TextBlock Text="🖱️ 拖拽鼠标左键框选文字区域 | 按 Esc 或右键取消" 
-                       Foreground="#FFFFFF" 
-                       FontSize="14" 
+                       Foreground="#F1F5F9" 
+                       FontSize="13.5" 
                        FontWeight="Medium"/>
         </Border>
     </Grid>

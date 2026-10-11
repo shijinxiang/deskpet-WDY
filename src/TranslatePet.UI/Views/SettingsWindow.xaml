@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="哆啦A梦桌宠翻译 - 偏好设置" 
-        Height="540" Width="480"
+        Height="610" Width="550"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -10,59 +10,126 @@
         Topmost="True"
         MouseDown="OnWindowMouseDown">
     <Window.Resources>
-        <Style TargetType="TextBox">
-            <Setter Property="Background" Value="#171822"/>
-            <Setter Property="Foreground" Value="#E0E2EC"/>
-            <Setter Property="BorderBrush" Value="#2D2F3E"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Padding" Value="6,4"/>
-            <Setter Property="Height" Value="28"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-        </Style>
-
-        <Style TargetType="PasswordBox">
-            <Setter Property="Background" Value="#171822"/>
-            <Setter Property="Foreground" Value="#E0E2EC"/>
-            <Setter Property="BorderBrush" Value="#2D2F3E"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Padding" Value="6,4"/>
-            <Setter Property="Height" Value="28"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-        </Style>
-
-        <Style TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#A0A4B8"/>
-            <Setter Property="FontSize" Value="12"/>
-        </Style>
-
-        <Style TargetType="CheckBox">
-            <Setter Property="Foreground" Value="#E0E2EC"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Margin" Value="0,0,10,0"/>
-        </Style>
-
+        <!-- 统一柔和按钮样式 -->
         <Style TargetType="Button">
-            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="Foreground" Value="#F1F5F9"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="5" Padding="{TemplateBinding Padding}">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="7" Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.88"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.75"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Opacity" Value="0.4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- 统一柔和输入框样式 -->
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="#35101422"/>
+            <Setter Property="Foreground" Value="#F8FAFC"/>
+            <Setter Property="BorderBrush" Value="#22FFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="12.5"/>
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="7" 
+                                SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#4038BDF8"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#6366F1"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 统一柔和密码框样式 -->
+        <Style TargetType="PasswordBox">
+            <Setter Property="Background" Value="#35101422"/>
+            <Setter Property="Foreground" Value="#F8FAFC"/>
+            <Setter Property="BorderBrush" Value="#22FFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="12.5"/>
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="7" 
+                                SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#4038BDF8"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#6366F1"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#CBD5E1"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="#E2E8F0"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
     </Window.Resources>
 
-    <Border Background="#1F202C" CornerRadius="12" BorderBrush="#353748" BorderThickness="1">
+    <Border Background="#B8141724" CornerRadius="14" BorderThickness="1">
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#48FFFFFF" Offset="0"/>
+                <GradientStop Color="#1AFFFFFF" Offset="0.4"/>
+                <GradientStop Color="#2538BDF8" Offset="0.8"/>
+                <GradientStop Color="#122C334A" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.BorderBrush>
         <Border.Effect>
-            <DropShadowEffect BlurRadius="24" ShadowDepth="6" Color="#000000" Opacity="0.55"/>
+            <DropShadowEffect BlurRadius="36" ShadowDepth="8" Color="#000000" Opacity="0.45"/>
         </Border.Effect>
         <Grid Margin="18">
             <Grid.RowDefinitions>
@@ -73,36 +140,53 @@
 
             <!-- 标题栏 -->
             <Grid Grid.Row="0" Margin="0,0,0,12">
-                <TextBlock Text="⚙️ 哆啦A梦桌宠设置" Foreground="#00E5FF" FontWeight="Bold" FontSize="15" VerticalAlignment="Center"/>
-                <Button Content="✕" Width="26" Height="26" Background="#2B2D3C" Click="OnCloseClick" HorizontalAlignment="Right"/>
+                <TextBlock Text="⚙️ 哆啦A梦桌宠设置" Foreground="#38BDF8" FontWeight="SemiBold" FontSize="15" VerticalAlignment="Center"/>
+                <Button Content="✕" Width="28" Height="28" Background="#3522283C" BorderBrush="#1CFFFFFF" BorderThickness="1" Foreground="#94A3B8" Click="OnCloseClick" HorizontalAlignment="Right" ToolTip="关闭"/>
             </Grid>
 
             <!-- Tab 切换内容 -->
             <TabControl Grid.Row="1" Background="Transparent" BorderThickness="0">
-                <TabControl.Resources>
-                    <Style TargetType="TabItem">
-                        <Setter Property="Foreground" Value="#8F92A8"/>
-                        <Setter Property="FontSize" Value="12"/>
-                        <Setter Property="Padding" Value="10,6"/>
-                    </Style>
-                </TabControl.Resources>
-
                 <!-- OCR 设置 -->
                 <TabItem Header="文字识别 (OCR)">
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,10,0,0">
-                        <StackPanel>
-                            <TextBlock Text="OCR 服务提供方:" Margin="0,0,0,4"/>
-                            <ComboBox x:Name="OcrProviderComboBox" Height="28" Margin="0,0,0,12" SelectionChanged="OnOcrProviderChanged"/>
+                        <StackPanel Margin="0,0,10,0">
+                            <TextBlock Text="OCR 服务提供方:" Margin="0,0,0,6" Foreground="#CBD5E1"/>
+                            <ComboBox x:Name="OcrProviderComboBox" Height="32" Margin="0,0,0,12" SelectionChanged="OnOcrProviderChanged"/>
 
-                            <StackPanel x:Name="BaiduOcrSettingsPanel">
-                                <TextBlock Text="百度 API Key:" Margin="0,0,0,4"/>
-                                <TextBox x:Name="BaiduApiKeyTextBox" Margin="0,0,0,8"/>
-
-                                <TextBlock Text="百度 Secret Key:" Margin="0,0,0,4"/>
-                                <PasswordBox x:Name="BaiduSecretKeyPasswordBox" Margin="0,0,0,12"/>
-
-                                <TextBlock Text="💡 提示: 百度智能云通用文字识别提供每月免费调用额度，填入后即可享受高精识别；如未填将自动提示。" Foreground="#64687D" TextWrapping="Wrap"/>
+                            <!-- Windows 本地原生 OCR 面板 -->
+                            <StackPanel x:Name="WindowsOcrSettingsPanel">
+                                <Border Background="#30162438" BorderBrush="#350284C7" BorderThickness="1" CornerRadius="9" Padding="14" Margin="0,0,0,12">
+                                    <StackPanel>
+                                        <TextBlock Text="⚡ Windows 系统原生高精 OCR (免配置 / 毫秒级)" FontWeight="Bold" Foreground="#38BDF8" FontSize="13" Margin="0,0,0,6"/>
+                                        <TextBlock Text="• 完全本地离线运行，识别极速（约 10~30ms），零网络延迟。" Foreground="#94A3B8" FontSize="12" Margin="0,0,0,3"/>
+                                        <TextBlock Text="• 无需注册任何第三方云平台，无需 API Key，保护截图数据隐私。" Foreground="#94A3B8" FontSize="12" Margin="0,0,0,8"/>
+                                        <TextBlock x:Name="WindowsOcrStatusTextBlock" Text="系统语言支持检测中..." Foreground="#34D399" FontSize="11.5" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                                        <Button x:Name="BtnTestWindowsOcr" Content="🔌 快速测试本地 OCR 引擎" Click="OnTestWindowsOcrClick" Background="#0284C7" Foreground="#FFFFFF" Padding="14,6" HorizontalAlignment="Left"/>
+                                    </StackPanel>
+                                </Border>
                             </StackPanel>
+
+                            <!-- 百度云 OCR 面板 -->
+                            <StackPanel x:Name="BaiduOcrSettingsPanel">
+                                <Border Background="#35181E2E" BorderBrush="#20FFFFFF" BorderThickness="1" CornerRadius="9" Padding="14" Margin="0,0,0,12">
+                                    <StackPanel>
+                                        <TextBlock Text="百度 API Key:" Margin="0,0,0,5" Foreground="#CBD5E1"/>
+                                        <TextBox x:Name="BaiduApiKeyTextBox" Margin="0,0,0,10"/>
+
+                                        <TextBlock Text="百度 Secret Key:" Margin="0,0,0,5" Foreground="#CBD5E1"/>
+                                        <PasswordBox x:Name="BaiduSecretKeyPasswordBox" Margin="0,0,0,12"/>
+
+                                        <Button x:Name="BtnTestBaiduOcr" Content="🔌 测试百度 OCR 凭据连通性" Click="OnTestBaiduOcrClick" Background="#35252D42" BorderBrush="#20FFFFFF" BorderThickness="1" Foreground="#E2E8F0" Padding="14,6" HorizontalAlignment="Left" Margin="0,0,0,10"/>
+
+                                        <TextBlock Text="💡 提示: 百度智能云通用文字识别提供每月免费调用额度。若未填写凭据或发生网络波动，系统将自动无缝降级为 Windows 本地原生 OCR。" Foreground="#64748B" TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- 通用 OCR 测试反馈卡片 -->
+                            <Border x:Name="OcrTestResultBorder" CornerRadius="7" Padding="12,10" Margin="0,4,0,10" Visibility="Collapsed">
+                                <TextBlock x:Name="OcrTestResultTextBlock" Text="测试结果" FontSize="12" TextWrapping="Wrap" LineHeight="18"/>
+                            </Border>
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
@@ -110,45 +194,189 @@
                 <!-- 翻译引擎设置 -->
                 <TabItem Header="翻译服务 (AI)">
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,10,0,0">
-                        <StackPanel>
-                            <TextBlock Text="翻译引擎:" Margin="0,0,0,4"/>
-                            <ComboBox x:Name="TransProviderComboBox" Height="28" Margin="0,0,0,12" SelectionChanged="OnTransProviderChanged"/>
+                        <StackPanel Margin="0,0,10,0">
+                            <TextBlock Text="翻译引擎:" Margin="0,0,0,6" Foreground="#CBD5E1"/>
+                            <ComboBox x:Name="TransProviderComboBox" Height="32" Margin="0,0,0,12" SelectionChanged="OnTransProviderChanged"/>
 
+                            <!-- 大模型兼容接口配置 -->
                             <StackPanel x:Name="OpenAiSettingsPanel">
-                                <TextBlock Text="API 端点 (Base URL):" Margin="0,0,0,4"/>
-                                <TextBox x:Name="OpenAiBaseUrlTextBox" Margin="0,0,0,8"/>
+                                <Border Background="#35181E2E" BorderBrush="#20FFFFFF" BorderThickness="1" CornerRadius="9" Padding="14" Margin="0,0,0,12">
+                                    <StackPanel>
+                                        <TextBlock Text="⚡ 常用服务商快速填入 (一键预设):" Margin="0,0,0,6" Foreground="#38BDF8" FontWeight="SemiBold"/>
+                                        <ComboBox x:Name="AiPresetComboBox" Height="32" Margin="0,0,0,12" SelectionChanged="OnAiPresetChanged"/>
 
-                                <TextBlock Text="API 密钥 (API Key):" Margin="0,0,0,4"/>
-                                <PasswordBox x:Name="OpenAiApiKeyPasswordBox" Margin="0,0,0,8"/>
+                                        <TextBlock Text="API 端点 (Base URL):" Margin="0,0,0,5" Foreground="#CBD5E1"/>
+                                        <TextBox x:Name="OpenAiBaseUrlTextBox" Margin="0,0,0,10"/>
 
-                                <TextBlock Text="模型名称 (Model):" Margin="0,0,0,4"/>
-                                <TextBox x:Name="OpenAiModelTextBox" Margin="0,0,0,12"/>
+                                        <TextBlock Text="API 密钥 (API Key):" Margin="0,0,0,5" Foreground="#CBD5E1"/>
+                                        <PasswordBox x:Name="OpenAiApiKeyPasswordBox" Margin="0,0,0,10"/>
 
-                                <TextBlock Text="💡 兼容各大主流服务: 如 DeepSeek (https://api.deepseek.com/v1)、OpenAI、Moonshot 或本地 Ollama。" Foreground="#64687D" TextWrapping="Wrap"/>
+                                        <TextBlock Text="模型名称 (Model):" Margin="0,0,0,5" Foreground="#CBD5E1"/>
+                                        <TextBox x:Name="OpenAiModelTextBox" Margin="0,0,0,12"/>
+
+                                        <!-- 深度思考开关 -->
+                                        <Border Background="#35161C2E" BorderBrush="#2538BDF8" BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="0,0,0,12">
+                                            <StackPanel>
+                                                <CheckBox x:Name="DeepThinkingCheckBox" Content="🧠 开启模型深度思考 (Deep Thinking / R1思维链)" Click="OnDeepThinkingChanged"/>
+                                                <TextBlock x:Name="DeepThinkingHintTextBlock" Text="💡 当前已关闭 (极速秒级直出): 跳过推理链直接出译文 (约 1~2 秒)，日常翻译推荐关闭以防卡慢。" Foreground="#34D399" FontSize="11.5" TextWrapping="Wrap" Margin="22,5,0,0"/>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <Button x:Name="BtnTestAiTranslation" Content="🔌 测试大模型翻译连通性" Click="OnTestAiTranslationClick" Background="#4F46E5" Foreground="#FFFFFF" Padding="16,6" HorizontalAlignment="Left" Margin="0,0,0,10"/>
+
+                                        <TextBlock Text="💡 推荐使用 DeepSeek-V3 (极速且资费极低)；若本地运行 Ollama，无需填写 API Key。" Foreground="#64748B" TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </Border>
                             </StackPanel>
+
+                            <!-- 公共免密翻译通道 -->
+                            <StackPanel x:Name="PublicFallbackSettingsPanel" Visibility="Collapsed">
+                                <Border Background="#351C2138" BorderBrush="#354F46E5" BorderThickness="1" CornerRadius="9" Padding="14" Margin="0,0,0,10">
+                                    <StackPanel>
+                                        <TextBlock Text="🌐 公共免密翻译通道 (MyMemory)" FontWeight="Bold" Foreground="#818CF8" FontSize="13" Margin="0,0,0,6"/>
+                                        <TextBlock Text="• 免配置即用，无需任何 API Key，适合没有大模型账号或网络受限时快速使用。" Foreground="#94A3B8" FontSize="12" Margin="0,0,0,10"/>
+                                        <Button x:Name="BtnTestPublicTranslation" Content="🔌 测试公共翻译连通性" Click="OnTestPublicTranslationClick" Background="#3730A3" Foreground="#FFFFFF" Padding="14,6" HorizontalAlignment="Left"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- 翻译测试反馈卡片 -->
+                            <Border x:Name="TransTestResultBorder" CornerRadius="7" Padding="12,10" Margin="0,4,0,10" Visibility="Collapsed">
+                                <TextBlock x:Name="TransTestResultTextBlock" Text="测试结果" FontSize="12" TextWrapping="Wrap" LineHeight="18"/>
+                            </Border>
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
 
-                <!-- 快捷键与桌面配置 -->
-                <TabItem Header="快捷键与桌宠">
+                <!-- 专属提示词定制 -->
+                <TabItem Header="🤖 专属提示词定制">
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,10,0,0">
-                        <StackPanel>
-                            <TextBlock Text="全局截图翻译快捷键:" Margin="0,0,0,6"/>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                                <CheckBox x:Name="AltCheckBox" Content="Alt" IsChecked="True"/>
-                                <CheckBox x:Name="CtrlCheckBox" Content="Ctrl"/>
-                                <CheckBox x:Name="ShiftCheckBox" Content="Shift"/>
-                                <CheckBox x:Name="WinCheckBox" Content="Win"/>
-                                <TextBlock Text="+" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                                <ComboBox x:Name="HotkeyCharComboBox" Width="60" Height="26"/>
+                        <StackPanel Margin="0,0,10,0">
+                            <!-- 1. 地道口语 -->
+                            <Grid Margin="0,0,0,4">
+                                <TextBlock Text="🗣️ 地道口语对话提示词 (与外国友人日常沟通):" FontWeight="SemiBold" Foreground="#38BDF8"/>
+                                <Button Content="🔄 恢复默认" Click="OnResetConversationalPromptClick" HorizontalAlignment="Right" Background="Transparent" Foreground="#64748B" Padding="4,0" FontSize="11.5"/>
+                            </Grid>
+                            <TextBox x:Name="PromptConversationalTextBox" Height="80" AcceptsReturn="True" TextWrapping="Wrap" Margin="0,0,0,12" FontSize="12"/>
+
+                            <!-- 2. 通用学术标准 -->
+                            <Grid Margin="0,0,0,4">
+                                <TextBlock Text="📖 通用学术标准提示词 (忠实规范准确):" FontWeight="SemiBold" Foreground="#34D399"/>
+                                <Button Content="🔄 恢复默认" Click="OnResetStandardPromptClick" HorizontalAlignment="Right" Background="Transparent" Foreground="#64748B" Padding="4,0" FontSize="11.5"/>
+                            </Grid>
+                            <TextBox x:Name="PromptStandardTextBox" Height="70" AcceptsReturn="True" TextWrapping="Wrap" Margin="0,0,0,12" FontSize="12"/>
+
+                            <!-- 3. 商务正式公文 -->
+                            <Grid Margin="0,0,0,4">
+                                <TextBlock Text="💼 商务正式公文提示词 (涉外邮件与公文):" FontWeight="SemiBold" Foreground="#FBBF24"/>
+                                <Button Content="🔄 恢复默认" Click="OnResetFormalPromptClick" HorizontalAlignment="Right" Background="Transparent" Foreground="#64748B" Padding="4,0" FontSize="11.5"/>
+                            </Grid>
+                            <TextBox x:Name="PromptFormalTextBox" Height="70" AcceptsReturn="True" TextWrapping="Wrap" Margin="0,0,0,12" FontSize="12"/>
+
+                            <!-- 4. 重点生词提取 -->
+                            <Grid Margin="0,0,0,4">
+                                <TextBlock Text="🔍 重点生词提炼提示词 (从句中提取核心词汇):" FontWeight="SemiBold" Foreground="#E2E8F0"/>
+                                <Button Content="🔄 恢复默认" Click="OnResetWordExtractionPromptClick" HorizontalAlignment="Right" Background="Transparent" Foreground="#64748B" Padding="4,0" FontSize="11.5"/>
+                            </Grid>
+                            <TextBox x:Name="PromptWordExtractionTextBox" Height="75" AcceptsReturn="True" TextWrapping="Wrap" Margin="0,0,0,12" FontSize="12"/>
+
+                            <!-- 5. 生词深度解析与助记 -->
+                            <Grid Margin="0,0,0,4">
+                                <TextBlock Text="💡 生词深度解析与助记提示词 (音标、例句、记忆法):" FontWeight="SemiBold" Foreground="#E2E8F0"/>
+                                <Button Content="🔄 恢复默认" Click="OnResetWordExplanationPromptClick" HorizontalAlignment="Right" Background="Transparent" Foreground="#64748B" Padding="4,0" FontSize="11.5"/>
+                            </Grid>
+                            <TextBox x:Name="PromptWordExplanationTextBox" Height="80" AcceptsReturn="True" TextWrapping="Wrap" Margin="0,0,0,12" FontSize="12"/>
+
+                            <TextBlock Text="💡 提示: 提示词中支持变量：{TargetLanguage}（目标语言，如简体中文）、{SourceText}（待处理原文）。修改后点击下方「保存配置」即生效。" Foreground="#64748B" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- 快捷键与桌宠配置 -->
+                <TabItem Header="快捷键与背单词">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,10,0,0">
+                        <StackPanel Margin="0,0,10,0">
+                            <TextBlock Text="全局截图翻译快捷键 (按键盘直接录制):" Margin="0,0,0,6" Foreground="#CBD5E1"/>
+
+                            <!-- 交互式快捷键录制框 -->
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="HotkeyRecorderBox"
+                                         Height="38"
+                                         IsReadOnly="True"
+                                         Cursor="Hand"
+                                         FontWeight="Bold"
+                                         FontSize="14"
+                                         Foreground="#38BDF8"
+                                         Background="#181C2B"
+                                         BorderBrush="#38BDF8"
+                                         BorderThickness="1.5"
+                                         Padding="12,6"
+                                         VerticalContentAlignment="Center"
+                                         PreviewKeyDown="OnHotkeyRecorderPreviewKeyDown"
+                                         GotFocus="OnHotkeyRecorderGotFocus"
+                                         LostFocus="OnHotkeyRecorderLostFocus"
+                                         ToolTip="点击此处后直接按下键盘上的快捷键（如 Alt+W、F4、F1）即可快速录制"/>
+                                <Button Grid.Column="1"
+                                        Content="🔄 恢复默认 (F4)"
+                                        Click="OnResetDefaultHotkeyClick"
+                                        Background="#22283C"
+                                        Foreground="#94A3B8"
+                                        Padding="12,0"
+                                        Height="38"
+                                        Margin="8,0,0,0"/>
+                            </Grid>
+
+                            <!-- 常用免冲突快捷键推荐 -->
+                            <TextBlock Text="常用推荐快捷键 (一键选用):" Margin="0,0,0,6" Foreground="#CBD5E1"/>
+                            <WrapPanel Margin="0,0,0,10">
+                                <Button Content="F4 (单键无需组合)" Click="OnQuickHotkeyClick" Tag="F4" Background="#351E2436" BorderBrush="#20FFFFFF" BorderThickness="1" Foreground="#F1F5F9" Padding="10,5" Margin="0,0,8,6"/>
+                                <Button Content="Alt + Q (推荐默认)" Click="OnQuickHotkeyClick" Tag="Alt+Q" Background="#351E2436" BorderBrush="#20FFFFFF" BorderThickness="1" Foreground="#F1F5F9" Padding="10,5" Margin="0,0,8,6"/>
+                                <Button Content="F1 (Snipaste习惯)" Click="OnQuickHotkeyClick" Tag="F1" Background="#351E2436" BorderBrush="#20FFFFFF" BorderThickness="1" Foreground="#F1F5F9" Padding="10,5" Margin="0,0,8,6"/>
+                                <Button Content="Alt + W" Click="OnQuickHotkeyClick" Tag="Alt+W" Background="#351E2436" BorderBrush="#20FFFFFF" BorderThickness="1" Foreground="#F1F5F9" Padding="10,5" Margin="0,0,8,6"/>
+                                <Button Content="Alt + C" Click="OnQuickHotkeyClick" Tag="Alt+C" Background="#351E2436" BorderBrush="#20FFFFFF" BorderThickness="1" Foreground="#F1F5F9" Padding="10,5" Margin="0,0,8,6"/>
+                            </WrapPanel>
+
+                            <!-- 手动细化设置组合 -->
+                            <TextBlock Text="手动调整组合:" Margin="0,0,0,6" Foreground="#CBD5E1"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <CheckBox x:Name="AltCheckBox" Content="Alt" Click="OnHotkeyManualChanged"/>
+                                <CheckBox x:Name="CtrlCheckBox" Content="Ctrl" Click="OnHotkeyManualChanged"/>
+                                <CheckBox x:Name="ShiftCheckBox" Content="Shift" Click="OnHotkeyManualChanged"/>
+                                <CheckBox x:Name="WinCheckBox" Content="Win" Click="OnHotkeyManualChanged"/>
+                                <TextBlock Text="+" VerticalAlignment="Center" Foreground="#64748B" Margin="0,0,6,0"/>
+                                <ComboBox x:Name="HotkeyCharComboBox" Width="76" Height="28" SelectionChanged="OnHotkeyCharSelectionChanged"/>
                             </StackPanel>
 
-                            <Separator Background="#2B2D3C" Margin="0,6,0,12"/>
+                            <!-- 实时冲突与可用性状态卡片 -->
+                            <Border x:Name="HotkeyStatusBorder" CornerRadius="7" Padding="12,9" Margin="0,0,0,12" Background="#351A2234" BorderThickness="1" BorderBrush="#20FFFFFF">
+                                <TextBlock x:Name="HotkeyStatusTextBlock" Text="正在检测快捷键可用性..." Foreground="#94A3B8" FontSize="12" TextWrapping="Wrap" LineHeight="18"/>
+                            </Border>
 
-                            <TextBlock Text="桌宠选项:" Margin="0,0,0,6"/>
+                            <Separator Background="#262D42" Margin="0,4,0,12"/>
+
+                            <!-- 每日背单词提醒 -->
+                            <TextBlock Text="📚 每日背单词提醒 (艾宾浩斯复习调度):" Margin="0,0,0,6" Foreground="#CBD5E1"/>
+                            <CheckBox x:Name="DailyReminderCheckBox" Content="开启每日背单词定时提醒" Margin="0,0,0,8"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                <TextBlock Text="每天提醒时间:" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="#CBD5E1"/>
+                                <TextBox x:Name="DailyReminderTimeTextBox" Width="72" Height="28" VerticalContentAlignment="Center" Margin="0,0,14,0"/>
+                                <TextBlock Text="每日建议复习目标:" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="#CBD5E1"/>
+                                <TextBox x:Name="DailyReviewGoalTextBox" Width="52" Height="28" VerticalContentAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBlock Text="词" VerticalAlignment="Center" Foreground="#CBD5E1"/>
+                            </StackPanel>
+                            <TextBlock Text="💡 开启后，哆啦A梦会在设定时间发出软萌气泡提醒，助您每天坚持复习生词！" Foreground="#64748B" TextWrapping="Wrap" Margin="0,0,0,12"/>
+
+                            <Separator Background="#262D42" Margin="0,4,0,12"/>
+
+                            <TextBlock Text="桌宠选项:" Margin="0,0,0,6" Foreground="#CBD5E1"/>
                             <CheckBox x:Name="TopMostCheckBox" Content="桌宠总在最前 (Topmost)" Margin="0,0,0,8"/>
-                            <Button Content="🔄 重置桌宠位置到屏幕右下角" Click="OnResetPetPositionClick" Background="#2E3040" Padding="10,6" HorizontalAlignment="Left" Margin="0,0,0,12"/>
+                            <CheckBox x:Name="EdgeSnapCheckBox" Content="🧲 启用桌面边缘吸附与探头动画" Margin="0,0,0,4"/>
+                            <TextBlock Text="💡 开启后，当您把桌宠拖动到屏幕左右边缘时，哆啦A梦会自动吸附并探出小脑袋看着你！" Foreground="#64748B" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                            <Button Content="🔄 重置桌宠位置到屏幕右下角" Click="OnResetPetPositionClick" Background="#3522283C" BorderBrush="#1CFFFFFF" BorderThickness="1" Foreground="#94A3B8" Padding="12,6" HorizontalAlignment="Left" Margin="0,0,12,0"/>
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
@@ -156,8 +384,8 @@
 
             <!-- 底部保存按钮 -->
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
-                <Button Content="取消" Click="OnCloseClick" Background="#2E3040" Padding="16,6" Margin="0,0,8,0"/>
-                <Button Content="💾 保存配置" Click="OnSaveClick" Background="#536DFE" FontWeight="SemiBold" Padding="18,6"/>
+                <Button Content="取消" Click="OnCloseClick" Background="#3522283C" BorderBrush="#1CFFFFFF" BorderThickness="1" Foreground="#94A3B8" Padding="18,7" Margin="0,0,10,0"/>
+                <Button Content="💾 保存配置" Click="OnSaveClick" Background="#4F46E5" Foreground="#FFFFFF" FontWeight="SemiBold" Padding="20,7"/>
             </StackPanel>
         </Grid>
     </Border>

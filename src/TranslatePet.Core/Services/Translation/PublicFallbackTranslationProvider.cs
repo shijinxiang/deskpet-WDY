@@ -17,7 +17,7 @@ public class PublicFallbackTranslationProvider : ITranslationProvider
         _httpClient = httpClient ?? new HttpClient();
     }
 
-    public async Task<TranslationResult> TranslateAsync(string text, string sourceLang, string targetLang, CancellationToken cancellationToken = default)
+    public async Task<TranslationResult> TranslateAsync(string text, string sourceLang, string targetLang, string? customPrompt = null, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(text))
         {
@@ -52,6 +52,27 @@ public class PublicFallbackTranslationProvider : ITranslationProvider
         catch (Exception ex)
         {
             return TranslationResult.Failed(text, $"公共翻译请求失败: {ex.Message}", sourceLang, targetLang);
+        }
+    }
+
+    public async Task<(bool Success, string Message)> TestConnectionAsync(CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            var url = "https://api.mymemory.translated.net/get?q=Hello&langpair=en|zh-CN";
+            using var response = await _httpClient.GetAsync(url, cancellationToken);
+            sw.Stop();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return (true, $"✅ 公共免密翻译通道正常！(耗时 {sw.ElapsedMilliseconds}ms)");
+            }
+            return (false, $"❌ 公共翻译通道响应错误 [HTTP {(int)response.StatusCode}]");
+        }
+        catch (Exception ex)
+        {
+            return (false, $"❌ 公共翻译网络异常: {ex.Message}");
         }
     }
 
